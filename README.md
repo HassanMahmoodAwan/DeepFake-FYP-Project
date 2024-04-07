@@ -1,5 +1,7 @@
 #DeepFake Text to SPeech
 
+#git clonr
+
 #cd App_frontend
 
 #npm i
@@ -15,5 +17,3 @@ cd ..
 #changes .env file according your
 
 #npm run start dev
-
-testing

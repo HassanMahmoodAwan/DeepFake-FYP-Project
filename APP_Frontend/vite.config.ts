@@ -7,6 +7,7 @@ export default defineConfig({
     proxy: {
       "/file": "http://localhost:3000",
       "/users": "http://localhost:3333",
+      "/textToSpeech": "http://localhost:3000",
 
       "/audio": "http://localhost:3000",
     },
