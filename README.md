@@ -1,17 +1,17 @@
 #DeepFake Text to SPeech
 
-# cd App_frontend
+#cd App_frontend
 
-# npm i
+#npm i
 
-# npm run dev
+#npm run dev
 
 cd ..
 
-# cd app Nest_bacekend
+#cd app Nest_bacekend
 
-# npm i
+#npm i
 
-# changes .env file according your
+#changes .env file according your
 
-# npm run start dev
+#npm run start dev
