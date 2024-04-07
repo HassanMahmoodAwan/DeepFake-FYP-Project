@@ -7,6 +7,7 @@ const Replicate = require('replicate');
 const { readFile } = require('fs').promises;
 
 const voiceCloning= require("./routes/voiceCloning")
+const textToSpeech = require("./routes/textToSpeech")
 
 const PORT = process.env.PORT ?? 3000
 
@@ -14,7 +15,9 @@ const app = express()
 app.use(fileUpload())
 app.use(bodyParser.text())
 app.use(express.json())
+
 app.use('/file', voiceCloning)
+app.use('/textToSpeech', textToSpeech)
 
 app.use('/audio', express.static(path.join(__dirname, 'public/audio')))
 
