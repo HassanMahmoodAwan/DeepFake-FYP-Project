@@ -1,5 +1,7 @@
 #DeepFake Text to SPeech
 
+#git clonr
+
 #cd App_frontend
 
 #npm i
