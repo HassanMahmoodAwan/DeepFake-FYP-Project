@@ -14,4 +14,4 @@ cd ..
 
 #changes .env file according your
 
-#npm run start dev
+#npm run start:dev
