@@ -30,7 +30,7 @@ export class AuthService {
   async signIn(user: UserDTO) {
     const userData = await this.validateUser(user.email, user.password);
     // console.log(userData);
-    console.log('000000000000000000000000000000');
+    // console.log('000000000000000000000000000000');
 
     if (userData) {
       let { _id, name, email } = userData._doc;
