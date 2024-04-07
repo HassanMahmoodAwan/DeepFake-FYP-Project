@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 import { Button } from "@material-tailwind/react"
 import { NavLink } from "react-router-dom"
 
@@ -17,25 +17,25 @@ function Navbar() {
             <ul className="hidden lg:flex space-x-8  text-base font-bold">
                 <NavLink to={"/"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Home</NavLink>
 
-                <NavLink to={"textSpeech"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Text-To-Speech</NavLink>
+                <NavLink to={"/textSpeech"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Text-To-Speech</NavLink>
 
-                <NavLink to={"voiceCloning"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>VoiceCloning</NavLink>
+                <NavLink to={"/voiceCloning"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>VoiceCloning</NavLink>
 
-                <NavLink to={"aboutUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>About Us</NavLink>
+                <NavLink to={"/aboutUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>About Us</NavLink>
 
-                <NavLink to={"contactUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Contact Us</NavLink>
+                <NavLink to={"/contactUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Contact Us</NavLink>
                 
             </ul>
 
             {/* Login SignUp */}
             <div className="hidden lg:flex space-x-2">
-                <Button variant="outlined" placeholder={''} size="sm">
-                    <NavLink to={"login"}>Login</NavLink>
-                </Button>
+                <NavLink to={"/login"}>
+                    <Button variant="outlined" placeholder={''} size="sm">Login</Button>
+                </NavLink>
                 
-                <Button variant="filled" placeholder={''} size="sm" className="bg-indigo-800">
-                    <NavLink to={"signup"}>SignUp</NavLink>
-                </Button>
+                <NavLink to={"/signup"}>
+                    <Button variant="filled" placeholder={''} size="sm" className="bg-indigo-800">SignUp</Button>
+                </NavLink>
             </div>
 
             {/* Hamburgur Icon */}
