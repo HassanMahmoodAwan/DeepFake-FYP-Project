@@ -17,14 +17,17 @@ function TextSpeech() {
 
 
   const [output, setOutput] = useState(null)
+  const [showOutput, setShowOutput] = useState(false)
 
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [mediaRecorder, setMediaRecorder] = useState(null)
   const [audioURL, setAudioURL] = useState(null)
-
+  
   const chunksRef = useRef([])
   const timerRef = useRef(null)
+
+  const [option, setOption] = useState<string>("Hassan")
 
 
   // ===== FIle Input ======
@@ -89,7 +92,7 @@ function TextSpeech() {
         </audio> )
         
     }else {
-      setInput("Provide Audio ....")
+      setInput("Provide Audio")
     }
     
     setShowInput(true)
@@ -108,7 +111,6 @@ function TextSpeech() {
     // Note: to Server.
     const response = await axios.post('/textToSpeech/upload', formData, {
       headers: {
-        // 'Content-Type': 'multipart/form-data',
         'Content-Type': 'audio/mpeg'
       }
     });
@@ -132,15 +134,15 @@ function TextSpeech() {
         chunksRef.current.push(e.data);
       };
 
-      if (recorder.state === 'inactive'){
+      // if (recorder.state === 'inactive'){
 
       
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/mp3' })
-        const url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob)
         const fileDate = Date.now()
         sendRecording(blob, fileDate)
-        setUploadFile(fileDate)
+        // setUploadFile(fileDate)
 
         setInput(
             <audio controls>
@@ -151,7 +153,7 @@ function TextSpeech() {
 
         clearInterval(timerRef.current)
       }
-    }
+    // }
       recorder.start()
       setMediaRecorder(recorder)
       setIsRecording(true)
@@ -162,9 +164,13 @@ function TextSpeech() {
 
       
     } catch (error) {
-      console.error('Error accessing the microphone:', error);
+      console.error('Error accessing the microphone:', error)
+      setAlertColor("red")
+      setAlertMsg(" Error Accessing MicroPhone! ")
+      setOpenAlert(true)
+
     }
-  };
+  }
 
   const stopRecording = () => {
     if (mediaRecorder && isRecording) {
@@ -179,8 +185,60 @@ function TextSpeech() {
     setRecordingTime(0);
     chunksRef.current = [];
     setAudioURL(null);
+    
   }
-  // End of Recording Input
+  // ==== End of Recording Input ====
+
+  
+  // ============ OUTPUT ===========
+  async function generateOutput(){
+    try {
+      if (text && option){
+          await fetch('/textToSpeech/option', {
+          method: 'POST',
+          headers: {
+            // 'Content-Type': 'text/plain',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ text, option }),
+        })
+        setOutput("Loading Generated Audio!")
+        setShowOutput(prev => !prev)
+      }else {
+        console.log("Text not Provided") 
+        alert("Text not Provided")
+      }
+      
+
+    } catch (error) {
+        setAlertColor("red")
+        setAlertMsg(" Server Error 500 ! ")
+        setOpenAlert(true)
+    } 
+  }
+
+  useEffect(()=>{
+    ;(async()=>{
+      if (showOutput){
+        try{
+          const response = await axios.get("/textToSpeech/upload")
+          setOutput(
+            <audio controls>
+                <source src={`${response.data}`} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio> 
+            )
+        }
+        catch(error){ 
+          setOutput("Error Generating Ouput!")
+        }
+      }            
+    })()
+    
+    setShowOutput(true)
+}, [showOutput])
+// ================= END OF OUTPUT ==========
+
 
 
 
@@ -302,10 +360,15 @@ function TextSpeech() {
               {/* ==== Select Options ==== */}
               <div className="w-72 lg:w-96 ">
                 <h1 className="mb-1 text-md font-bold">Select Voice Over</h1>
-                <Select color="purple" label="Select Version" placeholder={''} className="bg-white text-black">
-                  <Option>Dr Wajahat Qazi</Option>
-                  <Option>Muhammad Talha</Option>
-                </Select>
+                <Select label="Select Voice" placeholder={""}
+                  value={option}
+                  onChange={(val)=> setOption(val)} success>
+
+                    <Option value='Hassan'>Hassan</Option>
+                    <Option value='Custom'>Custom</Option>
+                    <Option value='Wajahat'>Wajahat</Option>
+
+                  </Select>    
               </div>
               {/* ====== End of Options ====== */}
 
@@ -323,7 +386,7 @@ function TextSpeech() {
               {/* ==== Output Button ===== */}
               <div className="pt-8 w-full flex justify-center">
                 <Button variant="filled" placeholder={''} className="bg-indigo-800 w-72 lg:w-96 "
-                  onClick={textToSpeechFeature}>
+                  onClick={generateOutput}>
                   Convert to Speech
                 </Button>
               </div>

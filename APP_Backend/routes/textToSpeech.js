@@ -8,6 +8,8 @@ const Replicate = require('replicate');
 const { readFile } = require('fs').promises;
 
 
+app.use(bodyParser.json());
+
 
 const REPLICATE_API_TOKEN="r8_06l6hwas5tCLkIEaTteQsVhantyhuU90rYoZo"
 // const REPLICATE_API_TOKEN="r8_8RntfbSfbVynvHdwJFK0Q2ap5jhN5ww2p05rf"
@@ -18,42 +20,58 @@ const replicate = new Replicate({
 
 
 let uploadedFile ;
-let option;
+let options;
+let texts;
 
 app.route("/upload").get( async(req, res)=>{
-  if (uploadedFile && option){
+  // console.log(options)
+  if (options && texts){
     try {
 
-      const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64'); // Await the result of readFile
-      const image = `data:application/octet-stream;base64,${data}`;
-      
-      let input;
-      if (option == "Wajahat"){
-        input = {
-          rvc_model: "CUSTOM",
-          custom_rvc_model_download_url: "https://replicate.delivery/pbxt/eDqhKrXNU7UxESSEve5MJTtyFr2wFeReNUfKY1mSycmqP87UC/wajahat_qazi.zip",
-          song_input: image,
-          main_vocals_volume_change: 10
-      };
-      }else {
-        input = {
-          rvc_model: option,
-          song_input: image,
-          main_vocals_volume_change: 10
-      };
+      let image ;
+      if (options == "Wajahat"){
+        const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64'); // Await the result of readFile
+        image = `data:application/octet-stream;base64,${data}`;
       }
-
+      else if (options == "Custom"){
+        const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64'); // Await the result of readFile
+        image = `data:application/octet-stream;base64,${data}`;
+      }
+      else if (options == "Hassan"){
+        console.log("working")
+        // const  data = (await readFile(`./public/audio/sampleAudio.mp3`)).toString('base64'); // Await the result of readFile
+        // const image = `data:application/octet-stream;base64,${data}`;
+        // const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString("base64");
+        // const image = `data:application/octet-stream;base64,${data}`;
+       const image = await readFile(`./public/audio/${uploadedFile.name}`)
+       const input = {
+            
+            // text: texts,
+            voice_a: "custom_voice",
+            custom_voice: image,
+            text: texts
+      }
       
       console.log("Input Provided, Wait Now")
+      
+      const output = await replicate.run(
+        "afiaka87/tortoise-tts:e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
+        {input}
 
-      const output = await replicate.run("zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550", { input }); // Await the result of replicate.run
+      );
+      console.log("Output Generated: ");
+      console.log(output);
+    }
+
+      
 
       console.log("Output Generated: ");
       console.log(output);
       
       res.send(output)
       uploadedFile = undefined
-      option = undefined
+      options = undefined
+      texts = undefined
       return;
 
     } catch (error) {
@@ -80,12 +98,16 @@ app.route("/upload").post( async(req, res)=>{
         }
         res.json({ message: 'File uploaded successfully.' });
       });
-
 })
 
 app.route('/option').post((req, res) => {
-  option = req.body; 
-  console.log(option)
+  // option = req.body; 
+
+   const { text, option } = req.body;
+   texts = text.toString()
+   options = option
+  console.log(options)
+  console.log(texts);
  
   res.send('Option received by backend');
 })
