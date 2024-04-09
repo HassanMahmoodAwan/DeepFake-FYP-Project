@@ -67,7 +67,7 @@ export class vcController {
 
   @Get('upload')
   async processUpload(@Body() body: any): Promise<any> {
-    console.log('check');
+    // console.log('check');
     return this.vcService.processUpload(body);
   }
 }
