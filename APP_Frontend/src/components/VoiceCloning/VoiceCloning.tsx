@@ -3,9 +3,6 @@ import {Select, Option, Alert, Button} from "@material-tailwind/react"
 import axios from "axios"
 
 
-
-
-
 function VoiceCloning() {
   const [filename, setFilename] = React.useState("No file uploaded")
   const [inputFile, setInputFile] = useState(null)
@@ -133,21 +130,7 @@ function VoiceCloning() {
         'Content-Type': 'audio/mpeg'
       }
     });
-    
-    
-    // const response = await fetch('/file/upload', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // });
 
-    // if (response.ok){
-    //   alert("Uploaded Successful !")
-    // }else {
-    //   alert("Error")
-    // }
         setAlertColor("green")
         setAlertMsg(" File Upload Successfully ")
         setOpenAlert(true)
@@ -427,7 +410,8 @@ function VoiceCloning() {
             {/* ======== OUTPUT ======== */}
             <div className='my-6 text-start'>
                   <h1 className='text-2xl font-bold '>Output:</h1>
-                  <div className='flex justify-center text-gray-600'>
+                  <div className='flex justify-center text-gray-600'
+                  >
                     {Output}
                   </div>
                 </div>

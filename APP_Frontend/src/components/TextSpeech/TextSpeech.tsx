@@ -44,7 +44,7 @@ function TextSpeech() {
         formData.append('file', uploadFile)
 
         // Note: to Server.
-        await axios.post('/textToSpeech/upload', formData, {
+        await axios.post('http://localhost:3333/textToSpeech/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

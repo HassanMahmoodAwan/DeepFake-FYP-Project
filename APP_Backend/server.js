@@ -1,10 +1,8 @@
 const express = require('express')
 const fileUpload = require("express-fileupload")
 const bodyParser = require('body-parser');
-
 const path = require("path")
-const Replicate = require('replicate');
-const { readFile } = require('fs').promises;
+
 
 const voiceCloning= require("./routes/voiceCloning")
 const textToSpeech = require("./routes/textToSpeech")
@@ -20,13 +18,6 @@ app.use('/file', voiceCloning)
 app.use('/textToSpeech', textToSpeech)
 
 app.use('/audio', express.static(path.join(__dirname, 'public/audio')))
-
-
-
-
-
-
-
 
 app.listen(PORT, ()=>{
     console.log(`Server Running on ${PORT}`);
