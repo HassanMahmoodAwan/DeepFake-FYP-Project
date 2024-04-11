@@ -53,6 +53,7 @@ function VoiceCloning() {
     }
   }
   
+
   async function handleFile(){
     if (uploadFile){
       try {
@@ -116,12 +117,13 @@ function VoiceCloning() {
   // =============================== //
 
 
+  const [rec_blob, setBlob] = useState(null)
+  const [rec_fileName, setRecFileName] = useState<any>('')
+  const [rec_File, setRecFile] = useState(false)
 
   
   // ====== REcording Audio =========== 
-
   const sendRecording = async (blob, fileDate)=>{
-    
     const formData = new FormData();
     formData.append('file', blob, `Voice_${fileDate}.mp3` );
     
@@ -129,7 +131,6 @@ function VoiceCloning() {
     // Note: to Server.
     const response = await axios.post('/file/upload', formData, {
       headers: {
-        // 'Content-Type': 'multipart/form-data',
         'Content-Type': 'audio/mpeg'
       }
     });
@@ -155,16 +156,17 @@ function VoiceCloning() {
       recorder.ondataavailable = (e) => {
         chunksRef.current.push(e.data);
       };
-
-      if (recorder.state === 'inactive'){
-
       
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/mp3' })
         const url = URL.createObjectURL(blob);
         const fileDate = Date.now()
-        sendRecording(blob, fileDate)
+        setBlob(blob)
+        setRecFileName(fileDate)
+        setRecFile(true)
         setUploadFile(fileDate)
+
+        // sendRecording(blob, fileDate)
 
         // setShowInput(prev=>!prev)
         setInputFile(
@@ -176,9 +178,7 @@ function VoiceCloning() {
 
         clearInterval(timerRef.current)
       }
-    }
-
-
+      
 
       recorder.start()
       setMediaRecorder(recorder)
@@ -186,9 +186,8 @@ function VoiceCloning() {
 
       timerRef.current = setInterval(() => {
         setRecordingTime(prevTime => prevTime + 1);
-      }, 1000);
+      }, 1000)
 
-      
     } catch (error) {
       console.error('Error accessing the microphone:', error);
     }
@@ -196,7 +195,6 @@ function VoiceCloning() {
 
   const stopRecording = () => {
     if (mediaRecorder && isRecording) {
-     
       mediaRecorder.stop()
       setIsRecording(false)
     }
@@ -214,13 +212,31 @@ function VoiceCloning() {
   // ============ OUTPUT ===========
   async function generateOutput(){
     try {
-      await fetch('/file/option', {
-        method: 'POST',
+      const formData = new FormData();
+      let content_type = ''
+
+      if (rec_File){
+        formData.append('file', rec_blob, `Voice_${rec_fileName}.mp3` );
+        content_type = 'audio/mpeg'
+      }else {
+        formData.append('file', uploadFile);
+        content_type = 'multipart/form-data'
+      }
+      formData.append('option', option)
+
+      await axios.post('/file/upload', formData, {
         headers: {
-          'Content-Type': 'text/plain',
-        },
-        body: option,
+          'Content-Type': 'multipart/form-data'
+        }
       })
+
+      // await fetch('/file/option', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'text/plain',
+      //   },
+      //   body: option,
+      // })
       setOutput("Loading Generated Audio!")
       setShowOutput(prev => !prev)
 
@@ -240,16 +256,13 @@ function VoiceCloning() {
             <audio controls>
                 <source src={`${response.data}`} type="audio/mpeg" />
                 Your browser does not support the audio element.
-            </audio> 
-            
-            )
+            </audio> )
         }
         catch(error){ 
           setOutput("Error Generating Ouput!")
         }
       }            
     })()
-    
     setShowOutput(true)
 }, [showOutput])
 // ================= END OF OUTPUT ==========
@@ -302,22 +315,24 @@ function VoiceCloning() {
             {/* =========== FILE INPUT ========== */}
             <div className="flex justify-between mt-10">
               
-              <div>
-              <div className="mt-1 flex items-center">
-                <label className="relative cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
-                <span>Choose File</span>
-                <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" 
-                onChange={useFileChange}/>
-                </label>
-                <span className='mx-2 px-1 border-2 rounded text-indigo-600'>{filename}</span>
+              <div className='w-full'>
+              <div className="w-full mt-1 flex items-center justify-between">
+                <div>
+                  <label className="relative cursor-pointer bg-yellow-800 hover:bg-amber-700 text-white   font-semibold py-2 px-4 rounded-lg shadow-md">
+                  <span>Choose File</span>
+                  <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0   cursor-pointer" 
+                  onChange={useFileChange}/>
+                  </label>
+                </div>
+                <div className='mx-2 px-1 border-2 rounded text-indigo-600'>{filename}</div>
               </div>
                   <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">Upload .mp3 or .wav file.</p>
               </div>
 
-              <div>
-                <button className='px-5 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white'
-                onClick={handleFile}>Submit file</button>
-              </div>
+              {/* <div>
+                {/* <button className='px-5 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white'
+                onClick={handleFile}>Submit file</button> 
+              </div> */}
             </div>
             {/* ================== END FileInput ==================== */}
 
@@ -332,31 +347,24 @@ function VoiceCloning() {
             {/* ============= RECORDING =============== */}
             <div className="max-w-md mx-auto overflow-hidden">
 
-            <div className="">
-              {/* <h2 className="text-lg font-semibold mb-4 text-gray-700">Record Voice</h2> */}
-              <div className="flex items-center justify-between mb-4">
+            <div className="space-y-8">
+              <div className="flex flex-col items-center justify-center mb-4">
                 {isRecording ? (
-                <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded-lg ">Stop</button>
+                <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded-lg ">Stop Recording</button>
                 ) : (
                 <button onClick={startRecording} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Start Recording</button>
                 )}
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">{`Recording should not be > 45 sec`}.</p>
+              </div>
 
+              <div className='flex justify-between'>
                 <span className="text-gray-600">
                   Record Time: 
                   <span className='text-2xl font-bold text-black'>
                     {` ${recordingTime}  `}</span> 
                   Sec's
                 </span>
-              </div>
-
-              {/* {audioURL && (
-              <div className="mb-4">
-                <audio controls src={audioURL}></audio>
-              </div>
-              )} */}
-              <div className='flex justify-center'>
-                
-                <button onClick={resetRecording} className="bg-gray-500 text-white px-4 py-2 rounded-lg">Reset Input</button>
+                <button onClick={resetRecording} className="text-gray-800 bg-gray-300 px-4 py-2 rounded-lg">Reset Input</button>
               </div>
             </div>
 
@@ -378,7 +386,6 @@ function VoiceCloning() {
                     <Option value='Trump'>Trump</Option>
                     <Option value='Biden'>Biden</Option>
                     <Option value='Wajahat'>Wajahat</Option>
-
                   </Select>         
               </div>
 

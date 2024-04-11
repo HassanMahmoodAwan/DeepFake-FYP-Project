@@ -1,5 +1,5 @@
 const express = require('express')
-const fileUpload = require("express-fileupload")
+// const fileUpload = require("express-fileupload")
 const bodyParser = require('body-parser');
 
 const path = require("path")
@@ -12,7 +12,7 @@ const textToSpeech = require("./routes/textToSpeech")
 const PORT = process.env.PORT ?? 3000
 
 const app = express()
-app.use(fileUpload())
+// app.use(fileUpload())
 app.use(bodyParser.text())
 app.use(express.json())
 
