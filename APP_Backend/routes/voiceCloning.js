@@ -19,6 +19,35 @@ const replicate = new Replicate({
 let uploadedFile ;
 let option;
 
+
+
+app.route("/upload").post( async(req, res)=>{
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).json({ error: 'No files were uploaded.' })
+      }
+
+      uploadedFile = req.files.file;
+      const uploadPath = path.join(__dirname, '../public/audio', uploadedFile.name);
+    
+      // Save the file to the public directory
+      await uploadedFile.mv(uploadPath, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: 'Error uploading file.' });
+        }
+        res.json({ message: 'File uploaded successfully.' });
+      });
+
+      
+})
+
+app.route('/option').post((req, res) => {
+  option = req.body; 
+  console.log(option)
+ 
+  res.send('Option received by backend');
+});
+
 app.route("/upload").get( async(req, res)=>{
   if (uploadedFile && option){
     try {
@@ -62,34 +91,6 @@ app.route("/upload").get( async(req, res)=>{
 
   } 
 })
-
-app.route("/upload").post( async(req, res)=>{
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).json({ error: 'No files were uploaded.' })
-      }
-
-      uploadedFile = req.files.file;
-      const uploadPath = path.join(__dirname, '../public/audio', uploadedFile.name);
-    
-      // Save the file to the public directory
-      await uploadedFile.mv(uploadPath, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Error uploading file.' });
-        }
-        res.json({ message: 'File uploaded successfully.' });
-      });
-
-})
-
-app.route('/option').post((req, res) => {
-  option = req.body; 
-  console.log(option)
- 
-  res.send('Option received by backend');
-});
-
-
 
 
 module.exports = app

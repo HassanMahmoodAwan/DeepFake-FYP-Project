@@ -42,7 +42,8 @@ export class AuthController {
   @Post('sign-in')
   signIn(
     @Body() user: SignInRequest,
-  ): Promise<AccessTokenResponse | errorResponse> {
+  // ): Promise<AccessTokenResponse | errorResponse> {
+  ):Promise<any>{
     return this.authService.signIn(user);
   }
 

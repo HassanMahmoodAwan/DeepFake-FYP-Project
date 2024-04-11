@@ -4,7 +4,7 @@ import axios from "axios"
 
 
 function VoiceCloning() {
-  const [filename, setFilename] = React.useState("No file uploaded")
+  const [filename, setFilename] = useState("No file uploaded")
   const [inputFile, setInputFile] = useState(null)
   const [uploadFile, setUploadFile] = useState(null)
 
@@ -124,7 +124,7 @@ function VoiceCloning() {
     
     try{
     // Note: to Server.
-    const response = await axios.post('/file/upload', formData, {
+    const response = await axios.post('http://localhost:3333/file', formData, {
       headers: {
         // 'Content-Type': 'multipart/form-data',
         'Content-Type': 'audio/mpeg'

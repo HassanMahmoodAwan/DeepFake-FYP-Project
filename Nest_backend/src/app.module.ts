@@ -5,6 +5,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { vcModule } from './modules/voice_cloning/vc.module';
+import { QueryModule } from './modules/contactUs/query.module';
 // import { TextToSpeechModule } from './modules/Text-to-speech/tts.module';
 
 @Module({
@@ -17,6 +18,7 @@ import { vcModule } from './modules/voice_cloning/vc.module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    QueryModule,
   ],
   controllers: [],
   providers: [

@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express.Router()
 // const fileUpload = require("express-fileupload")
-// const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 const path = require("path")
 const Replicate = require('replicate');

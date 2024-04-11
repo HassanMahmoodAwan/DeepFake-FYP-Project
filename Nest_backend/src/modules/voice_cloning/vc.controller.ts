@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   Get,
+  Request,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,6 +23,8 @@ import { diskStorage } from 'multer';
 
 import { vcService } from './vc.service';
 import { readFile } from 'fs/promises';
+import { fileDto } from './dto/file.dto';
+import { LogTextDto } from './dto/text.dto';
 
 @Controller('file')
 export class vcController {
@@ -59,15 +62,15 @@ export class vcController {
   @ApiInternalServerErrorResponse({
     description: 'Some Unknown Error Occurred',
   })
-  @Post('option')
-  receiveOption(@Body() option: any): string {
-    console.log(option);
-    return 'Option received by backend';
+  @Post('logText')
+  logText(@Body() fDto: LogTextDto) {
+    console.log(fDto.text); // Log the text to the console
+    return { message: 'Text logged successfully' }; // Return a response
   }
+  // @Get('upload')
+  // async processUpload(@Body() body: any): Promise<any> {
+  //   // console.log('check');
 
-  @Get('upload')
-  async processUpload(@Body() body: any): Promise<any> {
-    // console.log('check');
-    return this.vcService.processUpload(body);
-  }
+  //   return this.vcService.processUpload(body);
+  // }
 }

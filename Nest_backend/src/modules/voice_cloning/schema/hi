@@ -1,0 +1,33 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const DropdownComponent = () => {
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    axios.post('http://localhost:3000/option', { option: selectedOption })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error sending option to server:', error);
+      });
+  };
+
+  return (
+    <div>
+      <select value={selectedOption} onChange={handleChange}>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+};
+
+export default DropdownComponent;
