@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express.Router()
-const fileUpload = require("express-fileupload")
 const bodyParser = require('body-parser');
-
 const path = require("path")
 const Replicate = require('replicate');
 const { readFile } = require('fs').promises;
@@ -18,101 +16,74 @@ const replicate = new Replicate({
 })
 
 
-
-let uploadedFile ;
 let options;
 let texts;
+let presets
 
 app.route("/upload").get( async(req, res)=>{
-  // console.log(options)
-  if (options && texts){
+  if (options && texts && presets){
     try {
-
-      let image ;
+      
+      let image
       if (options == "Wajahat"){
-        const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64'); // Await the result of readFile
-        image = `data:application/octet-stream;base64,${data}`;
+        // const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64')
+        // image = `data:application/octet-stream;base64,${data}`;
+        image = "https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3"
       }
-      else if (options == "Custom"){
-        const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString('base64'); // Await the result of readFile
-        image = `data:application/octet-stream;base64,${data}`;
+      else if (options == "Trump"){
+        image = "https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3";
       }
       else if (options == "Hassan"){
-        console.log("working")
-        // const  data = (await readFile(`./public/audio/sampleAudio.mp3`)).toString('base64'); // Await the result of readFile
-        // const image = `data:application/octet-stream;base64,${data}`;
-        // const data = (await readFile(`./public/audio/${uploadedFile.name}`)).toString("base64");
-        // const image = `data:application/octet-stream;base64,${data}`;
-       const image = await readFile(`./public/audio/${uploadedFile.name}`)
-       const input = {
-            
-            // text: texts,
-            voice_a: "custom_voice",
-            custom_voice: image,
-            text: texts
+       image = "https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3"
       }
-      
-      console.log("Input Provided, Wait Now")
-      
-      const output = await replicate.run(
-        "afiaka87/tortoise-tts:e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
-        {input}
 
-      );
-      console.log("Output Generated: ");
-      console.log(output);
+    const input = {     
+            seed: 0,
+            text: texts,
+            preset: presets,
+            voice_a: "custom_voice",
+            voice_b: "disabled",
+            voice_c: "disabled",
+            cvvp_amount: 0,
+            custom_voice: image,
     }
+    console.log("Input Provided, Wait Now")
 
-      
+    const output = await replicate.run(
+      "afiaka87/tortoise-tts:e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
+      {input}
+    
+    );
+    console.log("Output Generated: ");
+    console.log(output);
 
-      console.log("Output Generated: ");
-      console.log(output);
-      
-      res.send(output)
-      uploadedFile = undefined
-      options = undefined
-      texts = undefined
-      return;
+    res.send(output)
+    uploadedFile = undefined
+    options = undefined
+    texts = undefined
+    return
 
     } catch (error) {
       console.error(error)
       return;
    }
-
+  }else {
+    console.log("No Input Provided")
   } 
 })
 
-app.route("/upload").post( async(req, res)=>{
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).json({ error: 'No files were uploaded.' })
-      }
-
-      uploadedFile = req.files.file;
-      const uploadPath = path.join(__dirname, '../public/audio', uploadedFile.name);
-    
-      // Save the file to the public directory
-      await uploadedFile.mv(uploadPath, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Error uploading file.' });
-        }
-        res.json({ message: 'File uploaded successfully.' });
-      });
-})
-
-app.route('/option').post((req, res) => {
-  // option = req.body; 
-
-   const { text, option } = req.body;
+app.route('/text_option').post((req, res) => {
+   const { text, option, preset } = req.body;
    texts = text.toString()
    options = option
+   presets = preset
+  
+  console.log("Option received")
+  console.log(texts)
   console.log(options)
-  console.log(texts);
- 
-  res.send('Option received by backend');
+  console.log(presets)
+  res.send('Option received To backend');
 })
-
-
 
 
 module.exports = app
