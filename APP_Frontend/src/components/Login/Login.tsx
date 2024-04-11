@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
 import {
   Card,
   Input,
@@ -24,45 +25,40 @@ function LoginPage() {
     });
   };
 
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
-    
-
+    // console.log(formData);
+  
     if (validateForm()) {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      };
-
-      fetch("http://localhost:3333/auth/sign-in", requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setFormData({
-            email: "",
-            password: "",
-          });
-          toast.success("plz set a route for change", { autoClose: 2000 });
-          // Redirect or handle successful login
-          console.log("Login successful:", data);
-        })
-        .catch((error) => {
-          toast.error("Invalid email or password", { autoClose: 2000 });
-          console.error("There was a problem with the login request:", error);
+      try {
+        const response:any = await axios.post("http://localhost:3333/auth/sign-in", formData);
+        const data = response.data;
+  
+        console.log(data);
+  
+        const token = JSON.stringify(data);
+        console.log(token);
+        
+        sessionStorage.setItem('token', token);
+  
+        setFormData({
+          email: "",
+          password: "",
         });
+  
+        toast.success("Please set a route for redirection", { autoClose: 2000 });
+        // console.log("Login successful:", data);
+      } catch (error) {
+        toast.error("Invalid email or password", { autoClose: 2000 });
+        console.error("There was a problem with the login request:", error);
+      }
     } else {
       toast.error("Email and password are required", { autoClose: 2000 });
       console.log("Form is invalid");
     }
   };
+  
 
   const validateForm = () => {
     let errors = {};
