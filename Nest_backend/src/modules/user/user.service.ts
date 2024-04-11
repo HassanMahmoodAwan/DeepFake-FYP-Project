@@ -34,7 +34,7 @@ export class UserService {
       let userDto = { password: hashedPassword, ...rest };
       const newUser = new this.userModel(userDto);
       const user = await newUser.save();
-      console.log(user);
+      console.log(user); // talha add
 
       // To remove password from the response and findone function remove the password
       return await this.findOne(user._id);
