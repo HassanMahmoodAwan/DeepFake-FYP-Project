@@ -382,14 +382,6 @@ function VoiceCloning() {
                   </Select>         
               </div>
 
-              <div className="w-72">
-                <p>Language:  </p>
-                <Select label="Select Language" placeholder={""} disabled>
-                  <Option>Trump</Option>
-                  <Option>Biden</Option>
-                </Select>
-              </div>
-
             </div>
             {/* ========= END OF OPTIONS ========= */}
             
