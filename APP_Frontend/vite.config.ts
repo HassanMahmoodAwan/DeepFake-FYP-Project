@@ -12,5 +12,8 @@ export default defineConfig({
       "/audio": "http://localhost:3000",
     },
   },
+  optimizeDeps: {
+    exclude: ['js-big-decimal']
+  },
   plugins: [react()],
 });

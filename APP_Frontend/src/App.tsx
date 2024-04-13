@@ -19,7 +19,7 @@ function App() {
   ))
 
   return (
-    <div className="h-full w-full bg-gray-200">
+    <div className="h-full w-full bg-gray-100">
       
         <RouterProvider router={route} />
       
