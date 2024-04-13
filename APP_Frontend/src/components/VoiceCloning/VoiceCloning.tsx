@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react'
 import {Select, Option, Alert, Button} from "@material-tailwind/react"
 import axios from "axios"
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -10,39 +10,34 @@ function VoiceCloning() {
   const [filename, setFilename] = React.useState("No file uploaded")
   const [inputFile, setInputFile] = useState(null)
   const [uploadFile, setUploadFile] = useState(null)
+  const [option, setOption] = useState<string>("Trump")
 
-
-  
   const [openAlert, setOpenAlert] = useState(false)
   const [alertColor, setAlertColor] = useState<any | string>("yellow")
   const [alertMsg, setAlertMsg] = useState("Alert Message")
 
 
-
-
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [mediaRecorder, setMediaRecorder] = useState(null)
-  const [audioURL, setAudioURL] = useState(null)
 
   
-  const [input, setInput] = useState("No Input Provided")
-  const [Output, setOutput] = useState<JSX.Element | string>("Not Generated...")
+  const [Output, setOutput] = useState<JSX.Element | string>("No Generated Ouptut!")
   const [showInput, setShowInput] = useState(false)
   const [showOutput, setShowOutput] = useState(false)
 
+
+  const [rec_blob, setBlob] = useState(null)
+  const [rec_fileName, setRecFileName] = useState<any>('')
+  const [is_recFile, setIs_RecFile] = useState(false)
+
   
-  const [option, setOption] = useState<string>("Trump")
-
-
   const chunksRef = useRef([])
   const timerRef = useRef(null)
 
 
 
   // ===== File Upload and Handling File
-
-
   function useFileChange(e){
     const file = e.target.files[0]
     if (file){
@@ -52,53 +47,6 @@ function VoiceCloning() {
       setFilename("No file Chooses")
     }
   }
-  
-
-  async function handleFile(){
-    if (uploadFile){
-      try {
-        const formData = new FormData();
-        formData.append('file', uploadFile);
-
-        // Note: to Server.
-        await axios.post('/file/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        
-        if (!openAlert){
-          setAlertColor("green")
-          setAlertMsg(" File Uploaded Successfully! ")
-          setOpenAlert(true)
-        }
-        setShowInput(prev=>!prev)
-
-      } catch (error) {
-        console.error('Error uploading file:', error)
-        // alert('Error uploading file. Please try again.')
-        if (!openAlert){
-          setAlertColor("red")
-          setAlertMsg(" Error Uploading File! ")
-          setOpenAlert(true)
-        }
-      } 
-
-    }
-    else {
-      if (!openAlert){
-        setAlertColor("red")
-        setAlertMsg(" File Not Provided! ")
-        setOpenAlert(true)
-      }
-      setInputFile(
-      <div className='text-red-500 text-lg text-center'>
-          File Not Provided !
-      </div>)
-    }
-  }
-  // ======= End of FIle Handling ========
-
   // =======Input USE-Effect =======
   useEffect(()=>{     
     if (showInput && uploadFile){
@@ -109,46 +57,18 @@ function VoiceCloning() {
         </audio> )
         
     }else {
-      setInputFile("Provide Audio ....")
+      setInputFile("No Input Provided")
     }
     
     setShowInput(true)
   }, [showInput])
-  // =============================== //
+  // END of File Handling =============================== //
 
 
-  const [rec_blob, setBlob] = useState(null)
-  const [rec_fileName, setRecFileName] = useState<any>('')
-  const [rec_File, setRecFile] = useState(false)
 
   
   // ====== REcording Audio =========== 
-  const sendRecording = async (blob, fileDate)=>{
-    const formData = new FormData();
-    formData.append('file', blob, `Voice_${fileDate}.mp3` );
-    
-    try{
-    // Note: to Server.
-    const response = await axios.post('/file/upload', formData, {
-      headers: {
-        'Content-Type': 'audio/mpeg'
-      }
-    });
-
-        setAlertColor("green")
-        setAlertMsg(" File Upload Successfully ")
-        setOpenAlert(true)
-
-  }catch (error) {
-    console.error('Error uploading file:', error)
-
-    setAlertColor("red")
-    setAlertMsg(" Error Uploading File! ")
-    setOpenAlert(true)
-  } 
-  }
-
-  const startRecording = async () => {
+   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
@@ -163,23 +83,19 @@ function VoiceCloning() {
         const fileDate = Date.now()
         setBlob(blob)
         setRecFileName(fileDate)
-        setRecFile(true)
+        setIs_RecFile(true)
         setUploadFile(fileDate)
 
-        // sendRecording(blob, fileDate)
-
-        // setShowInput(prev=>!prev)
         setInputFile(
             <audio controls>
-            <source src={url} type="audio/mpeg" />
-            Your browser does not support the audio element.
+              <source src={url} type="audio/mpeg" />
+              Your browser does not support the audio element.
             </audio>  
         )
 
-        clearInterval(timerRef.current)
+        chunksRef.current = []
       }
       
-
       recorder.start()
       setMediaRecorder(recorder)
       setIsRecording(true)
@@ -191,20 +107,16 @@ function VoiceCloning() {
     } catch (error) {
       console.error('Error accessing the microphone:', error);
     }
-  };
+  }
 
   const stopRecording = () => {
     if (mediaRecorder && isRecording) {
       mediaRecorder.stop()
       setIsRecording(false)
+      clearInterval(timerRef.current)
+      setRecordingTime(0)
+      setInputFile(null)
     }
-  };
-
-  const resetRecording = () => {
-    setIsRecording(false);
-    setRecordingTime(0);
-    chunksRef.current = [];
-    setAudioURL(null);
   }
 
 
@@ -215,7 +127,7 @@ function VoiceCloning() {
       const formData = new FormData();
       let content_type = ''
 
-      if (rec_File){
+      if (is_recFile){
         formData.append('file', rec_blob, `Voice_${rec_fileName}.mp3` );
         content_type = 'audio/mpeg'
       }else {
@@ -230,13 +142,6 @@ function VoiceCloning() {
         }
       })
 
-      // await fetch('/file/option', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'text/plain',
-      //   },
-      //   body: option,
-      // })
       setOutput("Loading Generated Audio!")
       setShowOutput(prev => !prev)
 
@@ -268,8 +173,6 @@ function VoiceCloning() {
 // ================= END OF OUTPUT ==========
 
   
-
-
 
   return (
     <>
@@ -319,7 +222,9 @@ function VoiceCloning() {
               <div className="w-full mt-1 flex items-center justify-between">
                 <div>
                   <label className="relative cursor-pointer bg-yellow-800 hover:bg-amber-700 text-white   font-semibold py-2 px-4 rounded-lg shadow-md">
-                  <span>Choose File</span>
+                  <span>
+                  <FontAwesomeIcon icon="faFileUpload" />
+                    Choose File</span>
                   <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0   cursor-pointer" 
                   onChange={useFileChange}/>
                   </label>
@@ -345,35 +250,36 @@ function VoiceCloning() {
 
 
             {/* ============= RECORDING =============== */}
-            <div className="max-w-md mx-auto overflow-hidden">
+            <div className="overflow-hidden">
 
-            <div className="space-y-8">
-              <div className="flex flex-col items-center justify-center mb-4">
+            <div className="flex justify-between">
+              <div className="">
                 {isRecording ? (
-                <button onClick={stopRecording} className="bg-red-500 text-white px-4 py-2 rounded-lg ">Stop Recording</button>
+                <button onClick={stopRecording} className="bg-red-600 text-white px-4 py-2 rounded-lg ">Stop Recording</button>
                 ) : (
-                <button onClick={startRecording} className="bg-blue-500 text-white px-4 py-2 rounded-lg">Start Recording</button>
+                <button onClick={startRecording} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Start Recording</button>
                 )}
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">{`Recording should not be > 45 sec`}.</p>
+                
               </div>
 
-              <div className='flex justify-between'>
+              <div className='pr-2'>
                 <span className="text-gray-600">
                   Record Time: 
                   <span className='text-2xl font-bold text-black'>
                     {` ${recordingTime}  `}</span> 
-                  Sec's
+                  Seconds
                 </span>
-                <button onClick={resetRecording} className="text-gray-800 bg-gray-300 px-4 py-2 rounded-lg">Reset Input</button>
+                {/* <button onClick={resetRecording} className="text-gray-800 bg-gray-300 px-4 py-2 rounded-lg">Reset Input</button> */}
               </div>
             </div>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">{`Recording should not be > 45 sec`}.</p>
 
             </div>
             {/* === End of Recording === */}
 
 
             {/* ======== OPTIONS ====== */}
-            <div className='w-full bg-gray-800 pt-[2px] rounded my-8'></div>
+            <div className='w-full bg-gray-800 pt-[2px] rounded mt-10'></div>
             
             <div className='w-full h-auto grid place-content-center pt-10 space-y-4'>
 
@@ -393,8 +299,8 @@ function VoiceCloning() {
             {/* ========= END OF OPTIONS ========= */}
             
             {/* ======= Generate Output Button ======== */}
-            <div className='my-12'>
-              <button className='px-8 py-2 bg-indigo-800 hover:bg-indigo-900 text-white font-bold rounded'
+            <div className='mt-14 mb-8'>
+              <button className='px-20 py-2 bg-indigo-800 hover:bg-indigo-900 text-white font-bold rounded'
               onClick={generateOutput}>Generate Audio</button>
             </div>
             {/* ========= End of BTN =========== */}

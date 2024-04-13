@@ -15,34 +15,47 @@ const replicate = new Replicate({
 });
 
 
-let uploadedFile ;
-let option;
+let uploadedFile
+let option
 
 app.route("/upload").get( async(req, res)=>{
   if (uploadedFile && option){
     try {
-      const data = (await readFile(`./public/audio/${uploadedFile.originalname}`)).toString('base64'); // Await the result of readFile
-      const image = `data:application/octet-stream;base64,${data}`;
+      const data = (await readFile(`./public/audio/${uploadedFile.originalname}`)).toString ('base64')
+      const image = `data:application/octet-stream;base64,${data}`
       
       let input;
-      if (option == "Wajahat"){
-        console.log("working")
-        input = {
-          rvc_model: "CUSTOM",
-          custom_rvc_model_download_url: "https://replicate.delivery/pbxt/eDqhKrXNU7UxESSEve5MJTtyFr2wFeReNUfKY1mSycmqP87UC/wajahat_qazi.zip",
-          song_input: image,
-          main_vocals_volume_change: 10
-      };
-      }else {
-        input = {
-          rvc_model: option,
-          song_input: image,
-          main_vocals_volume_change: 10
-      };
-      }      
+      switch(option){
+        case "Wajahat":
+          input = {
+            rvc_model: "CUSTOM",
+            custom_rvc_model_download_url: "https://replicate.delivery/pbxt/eDqhKrXNU7UxESSEve5MJTtyFr2wFeReNUfKY1mSycmqP87UC/wajahat_qazi.zip",
+            song_input: image,
+            main_vocals_volume_change: 10
+          }
+          break
+        
+        case "Imran Khan":
+          input = {
+            rvc_model: "CUSTOM",
+            custom_rvc_model_download_url: "https://replicate.delivery/pbxt/YyUdeoFLwFQFLKjfO1QJokWM40EznTaJgGB2AUDnleb9XGUlA/imran_niazi.zip",
+            song_input: image,
+            main_vocals_volume_change: 10
+          }
+          break
+        
+        default:
+          input = {
+            rvc_model: option,
+            song_input: image,
+            main_vocals_volume_change: 10
+        }
+        break
+      }
+
       console.log("Input Provided, Wait Now")
 
-      const output = await replicate.run("zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550", { input }); // Await the result of replicate.run
+      const output = await replicate.run("zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550", { input })
 
       console.log("Output Generated: ");
       console.log(output);
@@ -53,6 +66,7 @@ app.route("/upload").get( async(req, res)=>{
       return;
 
     } catch (error) {
+      res.send("Error while Running Model")
       console.error(error)
       return;
    }
@@ -88,17 +102,6 @@ app.route("/upload").post(upload.single('file'), (req, res) => {
 });
 // ====== End of Multer =======
 
-
-
-
-
-
-// app.route('/option').post((req, res) => {
-// option = req.body; 
-// console.log(option)
-
-// res.send('Option received by backend');
-// });
 
 
 module.exports = app
