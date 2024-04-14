@@ -3,7 +3,7 @@ import AccountAcess from "./AccountAcess"
 import AppInfo from "./AppInfo"
 import Features from "./Features"
 import Hero from "./Hero"
-// import SourceVoices from "./SourceVoices"
+import SourceVoices from "./SourceVoices"
 // import TextToSpeech from "./TextToSpeech"
 import UnderHero from "./UnderHero"
 
@@ -20,7 +20,7 @@ function Home() {
         <AppInfo />
         {/* <TextToSpeech /> */}
         <Features />
-        {/* <SourceVoices /> */}
+        <SourceVoices />
       
       
     </div>

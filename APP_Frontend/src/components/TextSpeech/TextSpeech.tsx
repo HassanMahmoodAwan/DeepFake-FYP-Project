@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Select, Option, Button, Alert } from "@material-tailwind/react";
+import { Select, Option, Button, Alert, Textarea, Spinner } from "@material-tailwind/react";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function TextSpeech() {
 
@@ -12,7 +13,7 @@ function TextSpeech() {
   const [alertColor, setAlertColor] = useState<any>("yellow")
   const [alertMsg, setAlertMsg] = useState("Alert Message")
 
-  const [output, setOutput] = useState(null)
+  const [output, setOutput] = useState<JSX.Element | string>('No Generated Output!')
   const [showOutput, setShowOutput] = useState(false)
 
 
@@ -29,12 +30,13 @@ function TextSpeech() {
           body: JSON.stringify({ text, option, preset })
         })
 
-        setOutput("Loading Generated Audio!")
+        setOutput(<div className='flex'>Loading<span><Spinner className='ml-4' color='blue'/></span></div>)
         setShowOutput(prev => !prev)
       }
       else {
         console.log("Text not Provided") 
         alert("Text not Provided")
+        return
       } 
 
     } catch (error) {
@@ -92,17 +94,22 @@ function TextSpeech() {
         <div className="w-full h-auto box-border space-y-1">
 
           {/* ===== Heading ===== */}
-          <h1 className="mb-16 text-center text-3xl font-bold">Text-To-Speech Deep Fake</h1>
+          <div className='mb-16'>
+            <h1 className="text-center text-3xl font-bold">DeepFake Text-To-Speech</h1>
+            <p className="mt-2 text-center text-gray-600 text-sm">Generate Speech based on provided text  and <br/>targeted person option.</p>
+          </div>
           {/*=== End of Heading===*/}
 
           <div className="w-full block md:flex space-x-3">
             {/* ===== Text BOX ===== */}
             <div id="TextArea" className="w-full md:w-[50%] box-border p-5 text-start">
-              <label htmlFor="TextBox" className="text-gray-600 text-sm">Max Words Allowed 1000</label>
-              <textarea id="TextBox" typeof="text" rows={9} placeholder="Enter your Mesage here" className="rounded text-base text-gray-800 w-full placeholder:text-base p-3 shadow-sm shadow-indigo-800"
+              <label htmlFor="TextBox" className="text-gray-600 text-sm">Max Words Allowed 500</label>
+              <Textarea id="TextBox" typeof="text" rows={9} placeholder="Enter your Mesage here" className="rounded text-base text-gray-800 w-full placeholder:text-base p-3 shadow-md shadow-gray-400"
+                label=''
                 value={text}
                 onChange={(e) => { setText(e.target.value) }}
               />
+              <p className='font-bold text-base text-gray-900'>Character Count: <span className='font-normal text-sm text-gray-800'>0</span></p>
             </div>
             {/* ======= End of Text Box ========= */}
 
@@ -116,9 +123,11 @@ function TextSpeech() {
                   value={option}
                   onChange={(val)=> setOption(val)} success>
 
-                    <Option value='Hassan'>Hassan</Option>
-                    <Option value='Trump'>Trump</Option>
+                    <Option value='daniel'>Daniel</Option>
+                    <Option value='emma'>Emma</Option>
+                    <Option value='ImranKhan'>Imran Khan</Option>
                     <Option value='Wajahat'>Wajahat</Option>
+                    <Option value='Trump'>Trump</Option>
 
                   </Select>    
               </div>
@@ -147,6 +156,7 @@ function TextSpeech() {
               <div className="pt-8 w-full flex justify-center">
                 <Button variant="filled" placeholder={''} className="bg-indigo-800 w-72 lg:w-96 "
                   onClick={generateOutput}>
+                  <FontAwesomeIcon icon="magic-wand-sparkles" className='pr-2' />
                   Convert to Speech
                 </Button>
               </div>
@@ -154,9 +164,9 @@ function TextSpeech() {
 
 
               {/* ===== Output ======= */}
-              <div className='pt-12 flex items-center'>
-                <h1 className="mb-2 text-lg font-bold">Output: </h1>
-                <div className='px-5'>
+              <div className='py-12 flex items-center'>
+                <h1 className=" text-lg font-bold">Output: </h1>
+                <div className='px-5 text-gray-600 text-base'>
                   {output}</div>
               </div>
               {/* =====End of Outupt== */}

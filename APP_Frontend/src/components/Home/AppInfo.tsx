@@ -2,7 +2,7 @@
 
 function AppInfo() {
   return (
-    <div className="h-auto w-full  text-center my-14">
+    <div className="h-auto w-full  text-center md:my-10">
         <h1 className="text-3xl font-bold mb-8">How Deep Fake Voice Cloning Works?</h1>
         <div className="flex flex-col items-center space-y-3 md:flex-row md:space-x-3 md:space-y-0 ">
             {/* Left Part */}

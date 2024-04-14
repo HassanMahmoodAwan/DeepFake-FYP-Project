@@ -1,6 +1,8 @@
 // import React from 'react'
 import { IconButton } from "@material-tailwind/react";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faGithub, faLinkedin, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons'
 
 function Footer() {
   return (
@@ -17,19 +19,13 @@ function Footer() {
                     <p className="lg:w-[350px] text-base text-center lg:text-start">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ut expedita quia </p>
                     
                     {/* Social Media Icons */}
-                    <div className="hidden lg:flex space-x-2">
-                        <IconButton variant="filled" placeholder={''} className="rounded-full bg-blue-900" size="sm">
-                            <i className="fab fa-linkedin text-lg" />
-                        </IconButton>
-                        <IconButton variant="filled" placeholder={''} className="rounded-full bg-blue-800" size="sm">
-                            <i className="fab fa-facebook text-lg" />
-                        </IconButton>
-                        <IconButton variant="filled" placeholder={''} className="rounded-full" size="sm" color="blue">
-                            <i className="fab fa-twitter text-lg" />
-                        </IconButton>
-                        <IconButton variant="filled" placeholder={''} className="rounded-full" size="sm">
-                            <i className="fab fa-github text-lg" />
-                        </IconButton>
+                    <div className="hidden lg:flex space-x-3">
+                        
+                        <FontAwesomeIcon icon={faGithub} className="text-2xl text-gray-900 cursor-pointer" />
+                        <FontAwesomeIcon icon={faLinkedin} className="text-2xl text-blue-700 cursor-pointer" />
+                        <FontAwesomeIcon icon={faGoogle} className="text-2xl text-red-800 cursor-pointer" />
+                        <FontAwesomeIcon icon={faTwitter} className="text-2xl text-blue-900 cursor-pointer" />
+                        
                     </div>
                 </div>
 
@@ -56,22 +52,12 @@ function Footer() {
 
 
                         {/* Social Media Icons */}
-                        <div className="flex lg:hidden justify-center space-x-2">
-                            <IconButton variant="filled" placeholder={''} className="rounded-full bg-blue-900" size="sm">
-                            <i className="fab fa-linkedin text-lg" />
-                            </IconButton>
-
-                            <IconButton variant="filled" placeholder={''} className="rounded-full bg-blue-800" size="sm">
-                            <i className="fab fa-facebook text-lg" />
-                            </IconButton>
-
-                            <IconButton variant="filled" placeholder={''} className="rounded-full" size="sm" color="blue">
-                            <i className="fab fa-twitter text-lg" />
-                            </IconButton>
-
-                            <IconButton variant="filled" placeholder={''} className="rounded-full" size="sm">
-                            <i className="fab fa-github text-lg" />
-                            </IconButton>
+                        <div className="flex lg:hidden justify-center space-x-3">
+                            <FontAwesomeIcon icon={faGithub} className="text-xl text-gray-900 cursor-pointer" />
+                            <FontAwesomeIcon icon={faLinkedin} className="text-xl text-blue-700 cursor-pointer" />
+                            <FontAwesomeIcon icon={faGoogle} className="text-xl text-red-800 cursor-pointer" />
+                            <FontAwesomeIcon icon={faTwitter} className="text-xl text-blue-900 cursor-pointer" />
+                            
                         </div>
 
                         </div>
