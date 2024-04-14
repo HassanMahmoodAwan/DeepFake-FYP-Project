@@ -35,7 +35,7 @@ app.route("/upload").get( async(req, res)=>{
           }
           break
         
-        case "Imran Khan":
+        case "ImranKhan":
           input = {
             rvc_model: "CUSTOM",
             custom_rvc_model_download_url: "https://replicate.delivery/pbxt/YyUdeoFLwFQFLKjfO1QJokWM40EznTaJgGB2AUDnleb9XGUlA/imran_niazi.zip",

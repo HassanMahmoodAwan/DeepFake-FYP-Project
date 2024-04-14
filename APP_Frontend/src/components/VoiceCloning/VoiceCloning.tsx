@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {Select, Option, Alert, Button} from "@material-tailwind/react"
+import {Select, Option, Alert, Button, Spinner} from "@material-tailwind/react"
 import axios from "axios"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {  faFolderOpen, faMagicWandSparkles, faMicrophone } from '@fortawesome/free-solid-svg-icons'
+
 
 
 
@@ -142,7 +143,7 @@ function VoiceCloning() {
         }
       })
 
-      setOutput("Loading Generated Audio!")
+      setOutput(<div className='flex'>Loading<span><Spinner className='ml-4' color='blue'/></span></div>)
       setShowOutput(prev => !prev)
 
     } catch (error) {
@@ -223,7 +224,7 @@ function VoiceCloning() {
                 <div>
                   <label className="relative cursor-pointer bg-yellow-800 hover:bg-amber-700 text-white   font-semibold py-2 px-4 rounded-lg shadow-md">
                   <span>
-                  <FontAwesomeIcon icon="faFileUpload" />
+                  <FontAwesomeIcon icon={"folder-open"} className='pr-2 text-yellow-900' />
                     Choose File</span>
                   <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0   cursor-pointer" 
                   onChange={useFileChange}/>
@@ -255,9 +256,13 @@ function VoiceCloning() {
             <div className="flex justify-between">
               <div className="">
                 {isRecording ? (
-                <button onClick={stopRecording} className="bg-red-600 text-white px-4 py-2 rounded-lg ">Stop Recording</button>
+                <button onClick={stopRecording} className="bg-red-600 text-white px-4 py-2 rounded-lg ">
+                  <FontAwesomeIcon icon={"circle-stop"} className='pr-2 text-yellow-900' />
+                  Stop Recording</button>
                 ) : (
-                <button onClick={startRecording} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Start Recording</button>
+                <button onClick={startRecording} className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                  <FontAwesomeIcon icon={"microphone"} className='pr-2 text-blue-900' />
+                  Start Recording</button>
                 )}
                 
               </div>
@@ -272,7 +277,7 @@ function VoiceCloning() {
                 {/* <button onClick={resetRecording} className="text-gray-800 bg-gray-300 px-4 py-2 rounded-lg">Reset Input</button> */}
               </div>
             </div>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">{`Recording should not be > 45 sec`}.</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">{`Not more than 45 seconds`}.</p>
 
             </div>
             {/* === End of Recording === */}
@@ -290,8 +295,9 @@ function VoiceCloning() {
                   onChange={(val)=> setOption(val)} success>
 
                     <Option value='Trump'>Trump</Option>
-                    <Option value='Biden'>Biden</Option>
                     <Option value='Wajahat'>Wajahat</Option>
+                    <Option value='ImranKhan'>Imran Khan</Option>
+                    <Option value='Biden'>Biden</Option>
                   </Select>         
               </div>
 
@@ -300,8 +306,10 @@ function VoiceCloning() {
             
             {/* ======= Generate Output Button ======== */}
             <div className='mt-14 mb-8'>
-              <button className='px-20 py-2 bg-indigo-800 hover:bg-indigo-900 text-white font-bold rounded'
-              onClick={generateOutput}>Generate Audio</button>
+              <button className='px-[73px] py-2 bg-indigo-800 hover:bg-indigo-900 text-white font-bold rounded'
+              onClick={generateOutput}>
+                <FontAwesomeIcon icon="magic-wand-sparkles" className='pr-2' />
+                Generate Audio</button>
             </div>
             {/* ========= End of BTN =========== */}
 
