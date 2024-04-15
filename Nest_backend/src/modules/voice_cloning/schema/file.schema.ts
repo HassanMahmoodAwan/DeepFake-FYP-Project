@@ -20,6 +20,14 @@ export class File extends Document {
 
   @Prop({ required: true })
   size: number;
-} // or any other property you need to store, like URL or metadata
+}
 
 export const FileSchema = SchemaFactory.createForClass(File);
+
+@Schema({ timestamps: true })
+export class Text extends Document {
+  @Prop({ required: true })
+  content: string;
+}
+
+export const TextSchema = SchemaFactory.createForClass(Text);

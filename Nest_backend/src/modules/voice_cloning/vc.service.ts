@@ -2,77 +2,113 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { File } from './schema/file.schema';
-import Replicate from 'replicate';
+import { Text } from './schema/file.schema';
+import { TextDto } from './dto/file.dto';
+const Replicate = require('replicate');
 import { readFile } from 'fs/promises';
 
 @Injectable()
 export class vcService {
-  // private uploadedFile: any;
-  // private option: any;
-  // private replicate: Replicate;
+  private replicate;
 
   constructor(
     @InjectModel(File.name)
-    private readonly fileModel: Model<File>, // replicate = new Replicate({
-  ) //   auth: 'r8_06l6hwas5tCLkIEaTteQsVhantyhuU90rYoZo',
-  // }),
-  {}
-  async uploadAFile(file: File): Promise<File> {
-    const newFile = new this.fileModel({
-      filename: file.filename,
-      originalname: file.originalname,
-      mimetype: file.mimetype,
-      destination: file.destination,
-      path: file.path,
-      size: file.size,
+    private readonly fileModel: Model<File>,
+    @InjectModel(Text.name)
+    private readonly textModel: Model<Text>,
+  ) {
+    this.replicate = new Replicate({
+      auth: 'r8_06l6hwas5tCLkIEaTteQsVhantyhuU90rYoZo',
     });
-
-    const savedFile = await newFile.save();
-    return savedFile;
   }
 
-  // async processUpload(body: any) {
-  //   try {
-  //     const data: string = (
-  //       await readFile(`../../uploads/${this.uploadedFile.name}`)
-  //     ).toString('base64');
-  //     const image = `data:application/octet-stream;base64,${data}`;
+  async uploadFileAndText(
+    file: Express.Multer.File,
+    textDto: TextDto,
+  ): Promise<any> {
+    try {
+      // Save the file
+      const newFile = new this.fileModel({
+        filename: file.filename,
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+        destination: file.destination,
+        path: file.path,
+        size: file.size,
+      });
+      const savedFile = await newFile.save();
 
-  //     let input;
-  //     if (this.option == 'Wajahat') {
-  //       input = {
-  //         rvc_model: 'CUSTOM',
-  //         custom_rvc_model_download_url:
-  //           'https://replicate.delivery/pbxt/eDqhKrXNU7UxESSEve5MJTtyFr2wFeReNUfKY1mSycmqP87UC/wajahat_qazi.zip',
-  //         song_input: image,
-  //         main_vocals_volume_change: 10,
-  //       };
-  //     } else {
-  //       input = {
-  //         rvc_model: this.option,
-  //         song_input: image,
-  //         main_vocals_volume_change: 10,
-  //       };
-  //     }
+      // Save the text
+      const newText = new this.textModel({
+        content: textDto.option,
+        fileId: savedFile._id,
+      });
+      const savedText = await newText.save();
 
-  //     console.log('Input Provided, Wait Now');
+      // Perform Replicate operation
+      const output = await this.runReplicate(
+        savedFile.originalname,
+        textDto.option,
+      );
 
-  //     const output = await this.replicate.run(
-  //       'zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
-  //       { input },
-  //     );
+      return { file: savedFile, text: savedText, output };
+    } catch (error) {
+      console.error('Error while uploading file and text:', error);
+      throw new Error('Error while uploading file and text.');
+    }
+  }
 
-  //     console.log('Output Generated: ');
-  //     console.log(output);
+  async runReplicate(filename: string, option: string): Promise<any> {
+    const data = await readFile(`./uploads/${filename}`);
+    const base64Data = data.toString('base64');
+    const image = `data:application/octet-stream;base64,${base64Data}`;
+    try {
+      let input;
+      switch (option) {
+        case 'Wajahat':
+          input = {
+            rvc_model: 'CUSTOM',
+            custom_rvc_model_download_url:
+              'https://replicate.delivery/pbxt/eDqhKrXNU7UxESSEve5MJTtyFr2wFeReNUfKY1mSycmqP87UC/wajahat_qazi.zip',
+            song_input: image,
+            main_vocals_volume_change: 10,
+          };
+          break;
 
-  //     // Reset uploadedFile and option after processing
-  //     this.uploadedFile = undefined;
-  //     this.option = undefined;
+        case 'ImranKhan':
+          input = {
+            rvc_model: 'CUSTOM',
+            custom_rvc_model_download_url:
+              'https://replicate.delivery/pbxt/YyUdeoFLwFQFLKjfO1QJokWM40EznTaJgGB2AUDnleb9XGUlA/imran_niazi.zip',
+            song_input: image,
+            main_vocals_volume_change: 10,
+          };
+          break;
 
-  //     return output;
-  //   } catch (error) {
-  //     console.error(error);
-  //     return null;
-  //   }
-  // }
+        default:
+          input = {
+            rvc_model: option,
+            song_input: image,
+            main_vocals_volume_change: 10,
+          };
+          break;
+      }
+      console.log('Input Provided, Wait Now');
+
+      const output = await this.replicate.run(
+        'zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
+        { input },
+      );
+      console.log('Output Generated: ');
+      console.log(output);
+
+      filename = undefined;
+      option = undefined;
+
+      return output;
+    } catch (error) {
+      console.error('Error while running Replicate:', error);
+      throw new Error('Error while running Replicate.');
+    }
+  }
 }

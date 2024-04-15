@@ -5,6 +5,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { vcModule } from './modules/voice_cloning/vc.module';
+import { TSModule } from './modules/TTS/tts.module';
 import { QueryModule } from './modules/contactUs/query.module';
 // import { TextToSpeechModule } from './modules/Text-to-speech/tts.module';
 
@@ -15,6 +16,7 @@ import { QueryModule } from './modules/contactUs/query.module';
       envFilePath: ['.env', `.env.${process.env.NODE_ENV}`],
     }),
     vcModule,
+    TSModule,
     DatabaseModule,
     AuthModule,
     UserModule,

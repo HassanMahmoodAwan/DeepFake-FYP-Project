@@ -13,11 +13,6 @@ function VoiceCloning() {
   const [uploadFile, setUploadFile] = useState(null)
   const [option, setOption] = useState<string>("Trump")
 
-  const [openAlert, setOpenAlert] = useState(false)
-  const [alertColor, setAlertColor] = useState<any | string>("yellow")
-  const [alertMsg, setAlertMsg] = useState("Alert Message")
-
-
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [mediaRecorder, setMediaRecorder] = useState(null)
@@ -39,37 +34,26 @@ function VoiceCloning() {
 
 
   // ===== File Upload and Handling File
-  function useFileChange(e){
+  async function useFileChange(e){
     const file = e.target.files[0]
+    const url = URL.createObjectURL(file)
+    console.log(url)
+
     if (file){
       setUploadFile(file)
       setFilename(file.name)
-      console.log(file);
       
+      setInputFile(
+        <audio controls>
+          <source src={url} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio> )
+
     }else{
       setFilename("No file Chooses")
     }
   }
-  // =======Input USE-Effect =======
-  useEffect(()=>{     
-    if (showInput && uploadFile){
-      setInputFile(
-        <audio controls>
-          <source src={`http://localhost:3000/audio/${uploadFile.name}`} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio> )
-        
-    }else {
-      setInputFile("No Input Provided")
-    }
-    
-    setShowInput(true)
-  }, [showInput])
-  // END of File Handling =============================== //
 
-
-
-  
   // ====== REcording Audio =========== 
    const startRecording = async () => {
     try {
@@ -128,75 +112,39 @@ function VoiceCloning() {
   async function generateOutput(){
     try {
       const formData = new FormData();
-      let content_type = ''
 
       if (is_recFile){
         formData.append('file', rec_blob, `Voice_${rec_fileName}.mp3` );
-        content_type = 'audio/mpeg'
+        setIs_RecFile(false)
       }else {
         formData.append('file', uploadFile);
-        content_type = 'multipart/form-data'
       }
       formData.append('option', option)
 
-      await axios.post('/file/upload', formData, {
+      setOutput(<div className='flex'>Loading<span><Spinner className='ml-4' color='blue'/></span></div>)
+
+      const response = await axios.post('http://localhost:3333/file/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
 
-      setOutput(<div className='flex'>Loading<span><Spinner className='ml-4' color='blue'/></span></div>)
-      setShowOutput(prev => !prev)
+      setOutput(
+        <audio controls>
+            <source src={`${response.data}`} type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio> )
 
     } catch (error) {
-        setAlertColor("red")
-        setAlertMsg(" Server Error 500 ! ")
-        setOpenAlert(true)
+        alert("Server Error!")
     } 
   }
 
-  useEffect(()=>{
-    ;(async()=>{
-      if (showOutput){
-        try{
-          const response = await axios.get("/file/upload")
-          setOutput(
-            <audio controls>
-                <source src={`${response.data}`} type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio> )
-        }
-        catch(error){ 
-          setOutput("Error Generating Ouput!")
-        }
-      }            
-    })()
-    setShowOutput(true)
-}, [showOutput])
-// ================= END OF OUTPUT ==========
 
   
 
   return (
     <>
-    {/* {showAlert} */}
-    <Alert
-    color={alertColor}
-    open={openAlert}
-    onClose={() => setOpenAlert(false)}
-    animate={{
-      mount: { y: 0 },
-      unmount: { y: 100 },
-    }
-    }
-    className='rounded px-10'
-  >
-    {alertMsg}
-  </Alert>
-  {/* End of Alert */}
-
-
-
     <div className="box-border my-10 px-28 space-y-10">
       
       {/* === HEADING & Highlight ===  */}
@@ -236,11 +184,6 @@ function VoiceCloning() {
               </div>
                   <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 text-start" id="file_input_help">Upload .mp3 or .wav file.</p>
               </div>
-
-              {/* <div>
-                {/* <button className='px-5 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white'
-                onClick={handleFile}>Submit file</button> 
-              </div> */}
             </div>
             {/* ================== END FileInput ==================== */}
 
