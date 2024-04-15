@@ -37,7 +37,7 @@ export class TTSService {
         let image;
         if (options == 'Wajahat') {
           image =
-            'https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3';
+            'https://replicate.delivery/pbxt/AhyW2pIU9G5PAVBwZIGI4TEqHCHJUYNUmvUz7fb7aoB78WVJA/tmpisppivsyfile%20%28wajahat_qazi%20Ver%29.mp3';
         } else if (options == 'Trump') {
           image =
             'https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3';
