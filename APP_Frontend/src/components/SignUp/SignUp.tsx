@@ -52,10 +52,11 @@ function SignUp() {
             email: "",
             password: "",
           });
-          toast.success("User registered successfully!", { autoClose: 2000 });
-          console.log("POST request successful:", data);
+          toast.success("User registered successfully!", { autoClose: 1000 });
+
+          // console.log("POST request successful:", data);
           setTimeout(() => {
-            <NavLink to={"/textSpeech"}/>
+            window.location.href = '/login';
           }, 2100); 
         })
         .catch((error) => {

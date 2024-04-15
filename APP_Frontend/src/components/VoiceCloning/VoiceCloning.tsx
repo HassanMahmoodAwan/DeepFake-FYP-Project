@@ -44,6 +44,8 @@ function VoiceCloning() {
     if (file){
       setUploadFile(file)
       setFilename(file.name)
+      console.log(file);
+      
     }else{
       setFilename("No file Chooses")
     }
@@ -195,13 +197,13 @@ function VoiceCloning() {
 
 
 
-    <div className="box-border my-20 px-28 space-y-10">
+    <div className="box-border my-10 px-28 space-y-10">
       
       {/* === HEADING & Highlight ===  */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Transform your Voice in 3 Simple Steps</h1>
+        <h1 className="text-3xl text-purple-700 font-bold">Transform your Voice in 3 Simple Steps</h1>
         <div className="w-full flex justify-center">
-         <p className="text-gray-600 w-[45%]">DeepCloning Transforms your voice in Realistic artist vocals, Esay to use. Your voice not more geneatically predetermine.</p>
+         <p className="text-gray-600 w-[45%]">DeepCloning Transforms your voice in Realistic artist vocals.</p>
         </div>
       </div>
       {/* =========== END of Heading =========== */}
@@ -212,8 +214,8 @@ function VoiceCloning() {
           <div className="w-[600px] h-auto  bg-gray-50 rounded shadow-lg shadow-indigo-100 text-center px-10 py-8">
 
             {/* === Heading === */}
-            <h1 className="text-xl font-bold">Voice Cloning Model</h1> 
-            <p className="text-sm text-gray-500 dark:text-gray-300" >Input audio should not be more than 30 sec.</p>
+            <h1 className="text-xl   text-purple-700 font-bold">Clone your voice</h1> 
+            {/* <p className="text-sm text-gray-500 dark:text-gray-300" >Input audio should not be more than 30 sec.</p> */}
             {/* ===End Heading=== */}
 
             {/* =========== FILE INPUT ========== */}

@@ -47,8 +47,11 @@ function LoginPage() {
           password: "",
         });
   
-        toast.success("Please set a route for redirection", { autoClose: 2000 });
+        // toast.success("Please set a route for redirection", { autoClose: 2000 });
         // console.log("Login successful:", data);
+        window.location.reload();
+        window.location.href = "/";
+        
       } catch (error) {
         toast.error("Invalid email or password", { autoClose: 2000 });
         console.error("There was a problem with the login request:", error);
