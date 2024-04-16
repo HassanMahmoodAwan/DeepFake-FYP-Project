@@ -62,6 +62,7 @@ export class vcService {
     const data = await readFile(`./uploads/${filename}`);
     const base64Data = data.toString('base64');
     const image = `data:application/octet-stream;base64,${base64Data}`;
+    console.log(image);
     try {
       let input;
       switch (option) {
@@ -75,11 +76,12 @@ export class vcService {
           };
           break;
 
-        case 'ImranKhan':
+        case 'Talha':
           input = {
             rvc_model: 'CUSTOM',
             custom_rvc_model_download_url:
-              'https://replicate.delivery/pbxt/YyUdeoFLwFQFLKjfO1QJokWM40EznTaJgGB2AUDnleb9XGUlA/imran_niazi.zip',
+              // 'https://replicate.delivery/pbxt/YyUdeoFLwFQFLKjfO1QJokWM40EznTaJgGB2AUDnleb9XGUlA/imran_niazi.zip',
+              'https://replicate.delivery/pbxt/th8nPe0sP700PyTFZlepuioHgmSlFcKGhLoY8tSVkLuGMeVlA/muhammad_talha.zip',
             song_input: image,
             main_vocals_volume_change: 10,
           };

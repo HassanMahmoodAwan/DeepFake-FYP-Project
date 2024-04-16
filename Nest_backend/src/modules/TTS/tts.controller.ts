@@ -21,7 +21,6 @@ export class TTSController {
   @Public()
   @Post('output')
   create(@Body() ttDto: ttsDto) {
-    console.log(ttDto);
     return this.ttsService.input(ttDto);
   }
 

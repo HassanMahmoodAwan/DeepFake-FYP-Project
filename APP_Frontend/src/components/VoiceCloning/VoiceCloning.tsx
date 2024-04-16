@@ -241,8 +241,8 @@ function VoiceCloning() {
 
                     <Option value='Trump'>Trump</Option>
                     <Option value='Wajahat'>Wajahat</Option>
-                    <Option value='ImranKhan'>Imran Khan</Option>
-                    <Option value='Biden'>Biden</Option>
+                    <Option value='Talha'>Talha</Option>
+                    {/* <Option value='Biden'>Biden</Option> */}
                   </Select>         
               </div>
 

@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function TextSpeech() {
   const [text, setText] = useState("");
-  const [option, setOption] = useState("Trump");
-  const [preset, setPreset] = useState("fast");
+  const [option, setOption] = useState("Wajahat");
+  // const [preset, setPreset] = useState("fast");
   const [charCount, setCharCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [audioSrc, setAudioSrc] = useState("");
@@ -16,13 +16,13 @@ function TextSpeech() {
   };
 
   const generateOutput = async () => {
+    console.log(text);  
     try {
-      if (text && option && preset) {
+      if (text && option) {
         setLoading(true);
         const response = await axios.post("http://localhost:3333/tts/output", {
           text,
           option,
-          preset,
         });
         setAudioSrc(response.data);
         setLoading(false);
@@ -99,14 +99,15 @@ function TextSpeech() {
                     onChange={(val) => setOption(val)}
                     success
                   >
-                    <Option value="daniel">Daniel</Option>
-                    <Option value="emma">Emma</Option>
-                    <Option value="ImranKhan">Imran Khan</Option>
+                    {/* <Option value="daniel">Daniel</Option> */}
+                    {/* <Option value="emma">Emma</Option> */}
+                    {/* <Option value="ImranKhan">Imran Khan</Option> */}
                     <Option value="Wajahat">Wajahat</Option>
                     <Option value="Trump">Trump</Option>
+                    <Option value="Talha">Talha</Option>
                   </Select>
                 </div>
-                <div className="w-72 lg:w-96 ">
+                {/* <div className="w-72 lg:w-96 ">
                   <h1 className="mb-1 text-md font-bold">Preset</h1>
                   <Select
                     label="Select"
@@ -119,7 +120,7 @@ function TextSpeech() {
                     <Option value="high_quality">High Quality</Option>
                     <Option value="standard">Standard</Option>
                   </Select>
-                </div>
+                </div> */}
                 <div className="w-72 lg:w-96 ">
                   <Button
                     variant="filled"

@@ -9,8 +9,8 @@ export class TTS extends Document {
   @Prop({ unique: false })
   option: string;
 
-  @Prop({ unique: false })
-  preset: string;
+  // @Prop({ unique: false })
+  // preset: string;
 }
 
 export const TTSSchema: any = SchemaFactory.createForClass(TTS);

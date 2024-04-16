@@ -12,8 +12,8 @@ export class ttsDto {
   @IsNotEmpty()
   option: string;
 
-  @ApiProperty({ required: true })
-  @IsString()
-  @IsNotEmpty()
-  preset: string;
+  // @ApiProperty({ required: true })
+  // @IsString()
+  // @IsNotEmpty()
+  // preset: string;
 }
