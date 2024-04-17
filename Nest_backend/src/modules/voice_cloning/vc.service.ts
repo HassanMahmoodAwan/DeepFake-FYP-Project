@@ -62,7 +62,6 @@ export class vcService {
     const data = await readFile(`./uploads/${filename}`);
     const base64Data = data.toString('base64');
     const image = `data:application/octet-stream;base64,${base64Data}`;
-    console.log(image);
     try {
       let input;
       switch (option) {
