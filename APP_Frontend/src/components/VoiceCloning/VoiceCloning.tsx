@@ -128,10 +128,11 @@ function VoiceCloning() {
           'Content-Type': 'multipart/form-data'
         }
       })
+      console.log(response.data.output)
 
       setOutput(
         <audio controls>
-            <source src={`${response.data}`} type="audio/mpeg" />
+            <source src={`${response.data.output}`} type="audio/mpeg" />
             Your browser does not support the audio element.
         </audio> )
 
