@@ -42,8 +42,8 @@ export class vcController {
     @UploadedFile() file: Express.Multer.File,
     @Body() textDto: TextDto,
   ): Promise<any> {
-    console.log('Uploaded file:', file);
-    console.log('Text content:', textDto.option);
+    // console.log('Uploaded file:', file);
+    // console.log('Text content:', textDto.option);
     return this.vcService.uploadFileAndText(file, textDto);
   }
 }

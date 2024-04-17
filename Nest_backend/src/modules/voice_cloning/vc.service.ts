@@ -100,8 +100,8 @@ export class vcService {
         'zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
         { input },
       );
-      console.log('Output Generated: ');
-      console.log(output);
+      // console.log('Output Generated: ');
+      // console.log(output);
 
       filename = undefined;
       option = undefined;
