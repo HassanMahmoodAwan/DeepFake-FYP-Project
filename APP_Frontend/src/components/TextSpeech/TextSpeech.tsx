@@ -16,7 +16,7 @@ function TextSpeech() {
   };
 
   const generateOutput = async () => {
-    console.log(text);  
+    // console.log(text);  
     try {
       if (text && option) {
         setLoading(true);
