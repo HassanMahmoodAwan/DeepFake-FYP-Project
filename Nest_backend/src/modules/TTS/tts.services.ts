@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { TTS } from './schema/tts.schema';
 import { ttsDto } from './dto/tts.dto';
 const Replicate = require('replicate');
+import { readFile } from 'fs/promises';
 
 @Injectable()
 export class TTSService {
@@ -31,14 +32,21 @@ export class TTSService {
       try {
         let image;
         if (options == 'Wajahat') {
-          image =
-            'https://replicate.delivery/pbxt/AhyW2pIU9G5PAVBwZIGI4TEqHCHJUYNUmvUz7fb7aoB78WVJA/tmpisppivsyfile%20%28wajahat_qazi%20Ver%29.mp3';
+          // image =
+          //   'https://replicate.delivery/pbxt/AhyW2pIU9G5PAVBwZIGI4TEqHCHJUYNUmvUz7fb7aoB78WVJA/tmpisppivsyfile%20%28wajahat_qazi%20Ver%29.mp3';
+          const data = (await readFile(`./dataset_tts/Wajahat_TTS_dataset.mp3`)).toString('base64'); 
+          image = `data:application/octet-stream;base64,${data}`;
+
         } else if (options == 'Trump') {
-          image =
-            'https://replicate.delivery/pbxt/235fJealHPlzgEsX0mwWwJQFkUKeHQmOYNjO5dUSQYeOUoiKB/tmpugf8hnq9file_stereo%20%28Trump%20Ver%29.mp3';
+          // image =
+          //   'https://replicate.delivery/pbxt/gpVrm9GvTiJDFpuN8lqt6GuXj81ymMXWUqG7EfReFJtgjoqSA/tmp4ktsldcefile_stereo%20%28Trump%20Ver%29.mp3';
+          const data = (await readFile(`./dataset_tts/Trump_TTS_dataset.mp3`)).toString('base64'); 
+          image = `data:application/octet-stream;base64,${data}`;
         } else if (options == 'Talha') {
-          image =
-            'https://replicate.delivery/pbxt/nKEq0YvtDI5bKRJFAQregLiaBYEYy1nkzdVU2girVo769fqSA/tmpd2dqxp2pfile_stereo%20%28muhammad_talha%20Ver%29.mp3';
+          // image =
+          //   'https://replicate.delivery/pbxt/nKEq0YvtDI5bKRJFAQregLiaBYEYy1nkzdVU2girVo769fqSA/tmpd2dqxp2pfile_stereo%20%28muhammad_talha%20Ver%29.mp3';
+          const data = (await readFile(`./dataset_tts/Talha_TTS_dataset.mp3`)).toString('base64'); 
+          image = `data:application/octet-stream;base64,${data}`;
         }
 
         const input = {

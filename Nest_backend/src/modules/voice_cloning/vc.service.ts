@@ -59,6 +59,7 @@ export class vcService {
   }
 
   async runReplicate(filename: string, option: string): Promise<any> {
+    
     const data = await readFile(`./uploads/${filename}`);
     const base64Data = data.toString('base64');
     const image = `data:application/octet-stream;base64,${base64Data}`;
