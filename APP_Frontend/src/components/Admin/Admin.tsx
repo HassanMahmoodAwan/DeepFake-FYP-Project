@@ -2,7 +2,7 @@ import React from 'react'
 
 function Admin() {
   return (
-    <section className='w-full h-full  flex flex-col items-center'>
+    <section className='w-full h-full  flex flex-col items-center '>
       <div className='w-[90%] flex flex-col items-center my-10 space-y-14'>
 
         {/* STATS */}
