@@ -19,6 +19,9 @@ module.exports = withMT({
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    colors:{
+      'ttsPurple': '#4311f4'
+    },
     extend: {},
   },
   plugins: [],

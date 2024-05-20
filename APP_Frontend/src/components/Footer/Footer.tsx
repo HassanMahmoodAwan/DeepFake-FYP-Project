@@ -70,7 +70,7 @@ function Footer() {
         
         
         {/* Bottom Line */}
-        <div className="h-[15px] relative bottom-0 w-full bg-indigo-900"></div>
+        <div className="h-[15px] relative bottom-0 w-full bg-ttsPurple"></div>
 
     </div>
       

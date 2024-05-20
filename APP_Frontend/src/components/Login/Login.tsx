@@ -81,7 +81,88 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-full h-full grid place-content-center my-10">
+
+
+    <>
+
+<section className="w-full h-full grid place-content-center">
+      <div className="md:w-auto h-auto bg-white my-10 rounded-xl sm:p-6 px-2 py-6
+                      flex flex-col items-center justify-center shadow">
+
+        {/* Heading */}
+        <div id="Heading" className="space-y-0.3 w-[85px] text-center mb-3">
+          <h1 className="text-2xl font-bold">Login</h1>
+          <div className="bg-ttsPurple h-1 rounded"></div>
+        </div>
+        {/* ======= */}
+
+
+        {/* ==== Sign-UP Form ==== */}
+        <form
+          className="mt-8 mb-2 w-96"
+          onSubmit={handleSubmit}
+        >
+          <div className="mb-1 flex flex-col gap-7">
+            
+
+           <div className="gap-2">
+              <label htmlFor="email">Your Email <span className="text-red-500"> *</span></label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                size="md"
+                placeholder="name@mail.com"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                value={formData.email}
+                onChange={handleChange}
+                crossOrigin=""
+              />
+           </div>
+            
+
+            <div className="gap-2">
+              <label htmlFor="password">Password <span className="text-red-500"> *</span></label>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                size="md"
+                placeholder="********"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                value={formData.password}
+                onChange={handleChange}
+                crossOrigin=""
+              />
+            </div>
+            
+          </div>
+          
+          <button type="submit" className="mt-9 bg-ttsPurple w-full text-white p-3 rounded-md">
+            Sign Up
+          </button>
+          <Typography
+            color="gray"
+            className="mt-4 text-center font-normal"
+            placeholder="Placeholder"
+          >
+             Don't have an account?{" "}
+            <NavLink to={"/signup"} className="font-bold text-ttsPurple">
+              Signup
+            </NavLink>
+          </Typography>
+        </form>
+        {/* ====================== */}
+        <ToastContainer
+        position="top-right"
+        style={{ marginTop: "4rem" }} 
+        />
+      </div>
+    </section>
+
+
+
+    {/* <div className="w-full h-full grid place-content-center my-10">
       <Card color="transparent" shadow={false} placeholder="Placeholder">
         <Typography variant="h4" color="blue-gray" placeholder="Placeholder">
           Login
@@ -133,7 +214,8 @@ function LoginPage() {
         </form>
       </Card>
       <ToastContainer position="top-right" style={{ marginTop: "4rem" }} />
-    </div>
+    </div> */}
+    </>
   );
 }
 

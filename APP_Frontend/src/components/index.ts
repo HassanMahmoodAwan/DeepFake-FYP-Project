@@ -8,6 +8,7 @@ import ContactUs from "./ContactUs/ContactUs";
 import Login from "./Login/Login";
 import SignUp from "./SignUp/SignUp";
 import Test from "./TestRoute/Test";
+import LogoTitle from "./LogoTitle/LogoTitle";
 
 
-export {Navbar, Footer, Home, TextSpeech, VoiceCloning, AboutUs, ContactUs, Login, SignUp, Test}
+export {Navbar, Footer, Home, TextSpeech, VoiceCloning, AboutUs, ContactUs, Login, SignUp, Test, LogoTitle}
