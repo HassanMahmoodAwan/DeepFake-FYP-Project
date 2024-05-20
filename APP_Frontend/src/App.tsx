@@ -3,7 +3,7 @@ import RouterLayout from "./RouterLayout"
 import './App.css'
 // import { Footer, Navbar } from "./components"
 import {Route, RouterProvider, createBrowserRouter, createRoutesFromElements} from "react-router-dom"
-import { AboutUs, ContactUs, Home, TextSpeech, VoiceCloning, Login, SignUp, Test } from "./components"
+import { AboutUs, ContactUs, Home, TextSpeech, VoiceCloning, Login, SignUp, Test, Admin } from "./components"
 
 function App() {
   const route = createBrowserRouter(createRoutesFromElements(
@@ -16,7 +16,7 @@ function App() {
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />}/>
       <Route path="Test" element={<Test/>}/>
-      
+      <Route path="admin" element={<Admin />} />
     </Route>
   ))
 
