@@ -13,7 +13,7 @@ function Footer() {
                 <div className="w-full lg:w-[50%] h-[50%] lg:h-full  grid place-content-center lg:space-y-3">
                     <div id="Logo-Footer" className="flex space-x-2 mb-2 justify-center lg:justify-start">
                         <h1 className="text-xl font-bold">Deep Cloning</h1>
-                        <h1 className="px-3 py-0.5 bg-indigo-700 rounded text-white font-bold">AI</h1>
+                        <h1 className="px-3 py-0.5 bg-ttsPurple rounded text-white font-bold">AI</h1>
                     </div>
 
                     <p className="lg:w-[350px] text-base text-center lg:text-start">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ut expedita quia </p>
@@ -21,10 +21,10 @@ function Footer() {
                     {/* Social Media Icons */}
                     <div className="hidden lg:flex space-x-3">
                         
-                        <FontAwesomeIcon icon={faGithub} className="text-2xl text-gray-900 cursor-pointer" />
-                        <FontAwesomeIcon icon={faLinkedin} className="text-2xl text-blue-700 cursor-pointer" />
-                        <FontAwesomeIcon icon={faGoogle} className="text-2xl text-red-800 cursor-pointer" />
-                        <FontAwesomeIcon icon={faTwitter} className="text-2xl text-blue-900 cursor-pointer" />
+                        <a href={"https://github.com/HassanMahmoodAwan/DeepFake-FYP-Project"}target="_blank"><FontAwesomeIcon icon={faGithub} className="text-2xl text-gray-900 cursor-pointer" /></a>
+                        <a href={"https://linktr.ee/DeepClonning"}target="_blank"><FontAwesomeIcon icon={faLinkedin} className="text-2xl text-blue-700 cursor-pointer" /></a>
+                        {/* <FontAwesomeIcon icon={faGoogle} className="text-2xl text-red-800 cursor-pointer" />
+                        <FontAwesomeIcon icon={faTwitter} className="text-2xl text-blue-900 cursor-pointer" /> */}
                         
                     </div>
                 </div>
@@ -38,25 +38,25 @@ function Footer() {
                             <h1 className="text-xl font-bold">Our Company</h1>
                             <ul className="space-x-2 md:space-x-4
                              lg:space-x-0 lg:space-y-1 flex lg:grid justify-center">
-                                <NavLink to={"/"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Home</NavLink>
+                                <NavLink to={"/"} className={({isActive})=> `${isActive ? 'text-ttsPurple': 'text-slate-900'}`}>Home</NavLink>
 
-                                <NavLink to={"textSpeech"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Text-To-Speech</NavLink>
+                                <NavLink to={"textSpeech"} className={({isActive})=> `${isActive ? 'text-ttsPurple': 'text-slate-900'}`}>Text-To-Speech</NavLink>
 
-                                <NavLink to={"voiceCloning"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>VoiceCloning</NavLink>
+                                <NavLink to={"voiceCloning"} className={({isActive})=> `${isActive ? 'text-ttsPurple': 'text-slate-900'}`}>VoiceCloning</NavLink>
 
-                                <NavLink to={"aboutUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>About</NavLink>
+                                <NavLink to={"aboutUs"} className={({isActive})=> `${isActive ? 'text-ttsPurple': 'text-slate-900'}`}>About</NavLink>
 
-                                <NavLink to={"contactUs"} className={({isActive})=> `${isActive ? 'text-purple-700': 'text-slate-900'}`}>Contact</NavLink>
+                                <NavLink to={"contactUs"} className={({isActive})=> `${isActive ? 'text-ttsPurple': 'text-slate-900'}`}>Contact</NavLink>
                             </ul>
 
 
 
                         {/* Social Media Icons */}
                         <div className="flex lg:hidden justify-center space-x-3">
-                            <FontAwesomeIcon icon={faGithub} className="text-xl text-gray-900 cursor-pointer" />
-                            <FontAwesomeIcon icon={faLinkedin} className="text-xl text-blue-700 cursor-pointer" />
-                            <FontAwesomeIcon icon={faGoogle} className="text-xl text-red-800 cursor-pointer" />
-                            <FontAwesomeIcon icon={faTwitter} className="text-xl text-blue-900 cursor-pointer" />
+                             <a href={"https://github.com/HassanMahmoodAwan/DeepFake-FYP-Project"}target="_blank"><FontAwesomeIcon icon={faGithub} className="text-xl text-gray-900 cursor-pointer" /> </a>
+                             <a href={"https://linktr.ee/DeepClonning"}target="_blank"> <FontAwesomeIcon icon={faLinkedin} className="text-xl text-blue-700 cursor-pointer" /> </a>
+                            {/* <FontAwesomeIcon icon={faGoogle} className="text-xl text-red-800 cursor-pointer" />
+                            <FontAwesomeIcon icon={faTwitter} className="text-xl text-blue-900 cursor-pointer" /> */}
                             
                         </div>
 

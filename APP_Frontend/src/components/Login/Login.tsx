@@ -11,13 +11,19 @@ import {
 import { useState } from "react";
 
 function LoginPage() {
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<string>("");
+  const [emailError, setemailError] = useState<boolean>(false)
+  const [passwordError, setPasswordError] = useState<boolean>(false)
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
+    setemailError(false)
+    setPasswordError(false)
+
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -28,7 +34,6 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log(formData);
   
     if (validateForm()) {
       try {
@@ -64,19 +69,34 @@ function LoginPage() {
   
 
   const validateForm = () => {
-    let errors = {};
+    
     let formIsValid = true;
 
     if (!formData.email.trim()) {
       formIsValid = false;
-      errors["email"] = "Email is required";
+      setErrors("Email  is required!")
+      setemailError(true)
+      return formIsValid
+    }else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      formIsValid = false;
+      setErrors("Invalid Email Format!")
+      setemailError(true)
+      return formIsValid
     }
 
     if (!formData.password.trim()) {
-      formIsValid = false;
-      errors["password"] = "Password is required";
+      formIsValid = false
+      setErrors("Password  is required!")
+      setPasswordError(true)
+      return formIsValid
+    }else if (formData.password.length < 8 || formData.password.length > 16){
+      formIsValid = false
+      setErrors("Password must be 08 to 16 chars!")
+      setPasswordError(true)
+      return formIsValid
     }
-    setErrors(errors);
+
+    
     return formIsValid;
   };
 
@@ -97,7 +117,7 @@ function LoginPage() {
         {/* ======= */}
 
 
-        {/* ==== Sign-UP Form ==== */}
+        {/* ==== LogIn Form ==== */}
         <form
           className="mt-8 mb-2 w-96"
           onSubmit={handleSubmit}
@@ -108,16 +128,25 @@ function LoginPage() {
            <div className="gap-2">
               <label htmlFor="email">Your Email <span className="text-red-500"> *</span></label>
               <Input
-                type="email"
+                type="text"
                 name="email"
                 id="email"
                 size="md"
                 placeholder="name@mail.com"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                  ${emailError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
                 value={formData.email}
                 onChange={handleChange}
                 crossOrigin=""
+                error={emailError}
+
               />
+              {emailError? <div className="text-sm text-red-400 absolute">
+                    {errors}
+                </div>:<div></div>}
            </div>
             
 
@@ -129,17 +158,25 @@ function LoginPage() {
                 id="password"
                 size="md"
                 placeholder="********"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                  ${passwordError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
+                labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
                 value={formData.password}
                 onChange={handleChange}
                 crossOrigin=""
+                error={passwordError}
               />
+              {passwordError? <div className="text-sm text-red-400 absolute">
+                    {errors}
+                </div>:<div></div>}
             </div>
             
           </div>
           
           <button type="submit" className="mt-9 bg-ttsPurple w-full text-white p-3 rounded-md">
-            Sign Up
+            Login
           </button>
           <Typography
             color="gray"
@@ -160,61 +197,6 @@ function LoginPage() {
       </div>
     </section>
 
-
-
-    {/* <div className="w-full h-full grid place-content-center my-10">
-      <Card color="transparent" shadow={false} placeholder="Placeholder">
-        <Typography variant="h4" color="blue-gray" placeholder="Placeholder">
-          Login
-        </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-          <div className="mb-1 flex flex-col gap-6">
-            <label htmlFor="email">Your Email</label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="name@mail.com"
-              className="!border-t-blue-gray-200 focus:!border-t-gray-900 p-2"
-              value={formData.email}
-              onChange={handleChange}
-              crossOrigin=''
-            />
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="********"
-              className="!border-t-blue-gray-200 focus:!border-t-gray-900 p-2"
-              value={formData.password}
-              onChange={handleChange}
-              crossOrigin='
-              '
-            />
-          </div>
-          <Button
-            className="mt-6 bg-indigo-600 w-full text-white p-3 rounded-md"
-            fullWidth
-            placeholder='placeholder'
-            onClick={handleSubmit}
-          >
-            Login
-          </Button>
-          <Typography
-            color="gray"
-            className="mt-4 text-center font-normal"
-            placeholder='placeholder'
-          >
-            Don't have an account?{" "}
-            <NavLink to={"/signup"} className="font-bold text-indigo-600">
-              Sign Up
-            </NavLink>
-          </Typography>
-        </form>
-      </Card>
-      <ToastContainer position="top-right" style={{ marginTop: "4rem" }} />
-    </div> */}
     </>
   );
 }

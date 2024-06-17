@@ -11,14 +11,24 @@ import {
 import { useState } from "react";
 
 function SignUp() {
-  const [errors, setErrors] = useState({});
+
+  const [emailError, setemailError] = useState(false)
+  const [nameError, setNameError] = useState(false)
+  const [passwordError, setpasswordError] = useState(false)
+  const [errors, setErrors] = useState<string | null>(null)
+
   const [formData, setFormData] = useState({
-    name: "",
+    firstName:"",
+    lastName: "",
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
+    setNameError(false)
+    setemailError(false)
+    setpasswordError(false)
+
     const { name, value } = e.target;
     const lowerCaseValue = name === "email" ? value.toLowerCase() : value;
     setFormData({
@@ -27,7 +37,47 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const validateForm = () => {
+    let formIsValid = true;
+  
+
+    if (formData.firstName === "") {
+      setErrors("FirstName  is required!")
+      formIsValid = false;
+      setNameError(true)
+      return formIsValid
+    }
+    
+
+    if (!formData.email.trim()) {
+      formIsValid = false;
+      setErrors("Email is required!");
+      setemailError(true)
+      return formIsValid
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      formIsValid = false;
+      setErrors("Invalid Email Format!")
+      setemailError(true)
+      return formIsValid
+    }
+
+    if (!formData.password.trim()) {
+      formIsValid = false;
+      setpasswordError(true)
+      setErrors("Password is required!");
+      return formIsValid
+    }else if (formData.password.length < 8 || formData.password.length > 16){
+      formIsValid = false
+      setErrors("Password must be 08 to 16 chars!")
+      setpasswordError(true)
+      return formIsValid
+    }
+
+    return formIsValid;
+  };
+
+
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
 
     if (validateForm()) {
@@ -48,7 +98,8 @@ function SignUp() {
         })
         .then((data) => {
           setFormData({
-            name: "",
+            firstName: "",
+            lastName: "",
             email: "",
             password: "",
           });
@@ -56,43 +107,22 @@ function SignUp() {
 
           // console.log("POST request successful:", data);
           setTimeout(() => {
-            window.location.href = '/login';
-          }, 2100); 
+            window.location.href = '/';
+          }, 1500); 
         })
         .catch((error) => {
           toast.error("Email already exists", { autoClose: 2000 });
           console.error("There was a problem with the POST request:", error);
         });
+        
     } else {
-      toast.error("All fields are necassary", { autoClose: 2000 });
+      // toast.error(errors || "All fields are required", { autoClose: 2000 });
       console.log("Form is invalid");
+      console.log(errors)
     }
   };
 
-  const validateForm = () => {
-    let errors = {};
-    let formIsValid = true;
-
-    if (!formData.name.trim()) {
-      formIsValid = false;
-      errors["name"] = "Full Name is required";
-    }
-
-    if (!formData.email.trim()) {
-      formIsValid = false;
-      errors["email"] = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      formIsValid = false;
-      errors["email"] = "Invalid email address";
-    }
-
-    if (!formData.password.trim()) {
-      formIsValid = false;
-      errors["password"] = "Password is required";
-    }
-    setErrors(errors);
-    return formIsValid;
-  };
+  
 
   return (
 
@@ -121,32 +151,43 @@ function SignUp() {
                 <label htmlFor="name">First Name <span className="text-red-500"> *</span></label>
                 <Input
                   type="text"
-                  name="name"
-                  id="name"
+                  name="firstName"
+                  id="firstName"
                   size="md"
                   placeholder="Enter First Name"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  value={formData.name}
+                  className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                    ${nameError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                  value={formData.firstName}
                   onChange={handleChange}
                   crossOrigin=""
+                  error={nameError}
                 />
+                {nameError? <div className="text-sm text-red-400 absolute">
+                    {errors}
+                </div>:<div></div>}
               </div>
 
               <div className="gap-2">
                 <label htmlFor="name">Last Name</label>
                 <Input
                   type="text"
-                  name="name"
-                  id="name"
+                  name="lastName"
+                  id="lastName"
                   size="md"
                   placeholder="Enter Last Name"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  value={formData.name}
+                  className="  shadow-md shadow-gray-200 focus:!border-gray-900 "
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                  value={formData.lastName}
                   onChange={handleChange}
                   crossOrigin=""
+                  
                 />
               </div>
-
             </div>
             
            
@@ -154,16 +195,25 @@ function SignUp() {
            <div className="gap-2">
               <label htmlFor="email">Your Email <span className="text-red-500"> *</span></label>
               <Input
-                type="email"
+                type="text"
                 name="email"
                 id="email"
                 size="md"
                 placeholder="name@mail.com"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                  ${emailError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                
                 value={formData.email}
                 onChange={handleChange}
                 crossOrigin=""
+                error = {emailError}
               />
+              {emailError? <div className="text-sm text-red-400 absolute">
+                    {errors}
+                </div>:<div></div>}
            </div>
             
 
@@ -175,28 +225,23 @@ function SignUp() {
                 id="password"
                 size="md"
                 placeholder="********"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                  ${passwordError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
                 value={formData.password}
                 onChange={handleChange}
                 crossOrigin=""
+                error = {passwordError}
               />
+              {passwordError? <div className="text-sm text-red-400 absolute">
+                    {errors}
+                </div>:<div></div>}
             </div>
             
           </div>
-          {/* <Checkbox
-            label={
-              <label>
-                I agree the
-                <a
-                  href="#"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </a>
-              </label>
-            }
-            crossOrigin=""
-          /> */}
+          
           <button type="submit" className="mt-9 bg-ttsPurple w-full text-white p-3 rounded-md">
             Sign Up
           </button>
@@ -219,89 +264,6 @@ function SignUp() {
       </div>
     </section>
 
-
-
-    {/* <div className="w-full h-full grid place-content-center my-10">
-      <Card color="indigo" shadow={false} placeholder="Placeholder">
-        <Typography variant="h4" color="blue-gray" placeholder="Placeholder">
-          Sign Up
-        </Typography>
-        <form
-          className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-1 flex flex-col gap-6">
-            <label htmlFor="name">Your Name</label>
-            <Input
-              type="text"
-              name="name"
-              id="name"
-              size="lg"
-              placeholder="Enter your name"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              value={formData.name}
-              onChange={handleChange}
-              crossOrigin=""
-            />
-            <label htmlFor="email">Your Email</label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              size="lg"
-              placeholder="name@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              value={formData.email}
-              onChange={handleChange}
-              crossOrigin=""
-            />
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              size="lg"
-              placeholder="********"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              value={formData.password}
-              onChange={handleChange}
-              crossOrigin=""
-            />
-          </div>
-          <Checkbox
-            label={
-              <label>
-                I agree the
-                <a
-                  href="#"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </a>
-              </label>
-            }
-            crossOrigin=""
-          />
-          <button type="submit" className="mt-6 bg-indigo-600 w-full text-white p-3 rounded-md">
-            Sign Up
-          </button>
-          <Typography
-            color="gray"
-            className="mt-4 text-center font-normal"
-            placeholder="Placeholder"
-          >
-            Already have an account?{" "}
-            <NavLink to={"/login"} className="font-bold text-indigo-600">
-              Login
-            </NavLink>
-          </Typography>
-        </form>
-      </Card>
-      <ToastContainer
-        position="top-right"
-        style={{ marginTop: "4rem" }} 
-      />
-    </div> */}
     </>
   );
 }

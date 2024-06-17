@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Button } from "@material-tailwind/react"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import LogoTitle from '../LogoTitle/LogoTitle'
 
@@ -10,6 +10,7 @@ function Navbar() {
     const [name, setName] = useState("");
     const token = sessionStorage.getItem('token');
     const received = JSON.parse(token);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (token) {
@@ -47,6 +48,12 @@ function Navbar() {
         } 
     };
 
+    const handleLogout = () => {
+        sessionStorage.removeItem('token');
+        setName("");
+        navigate("/login");
+    };
+
   return (
     <div className="h-14 w-full sticky top-0 z-10 border-box px-8 xl:px-20 bg-gray-200">
         <div className="h-full w-full flex justify-between items-center">
@@ -59,21 +66,27 @@ function Navbar() {
             <ul className="hidden lg:flex space-x-8  text-base font-bold">
                 <NavLink to={"/"} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>Home</NavLink>
 
+                <NavLink to={"/admin"} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>Admin</NavLink>
+
                 <NavLink to={"/textSpeech"}  onClick={handleTextToSpeechClick} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>Text-To-Speech</NavLink>
 
                 <NavLink to={"/voiceCloning"} onClick={handleVoiceCloningClick} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>VoiceCloning</NavLink>
 
-                <NavLink to={"/aboutUs"} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>About Us</NavLink>
+                {/* <NavLink to={"/aboutUs"} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>About Us</NavLink> */}
 
                 <NavLink to={"/contactUs"} className={({isActive})=> `${isActive ? 'text-indigo-800 border-b-2 border-ttsPurple': 'text-slate-900'}`}>Contact Us</NavLink>
+
+
                 
             </ul>
 
             {/* Login SignUp */}
             {name ? (
                     <div className="hidden lg:flex space-x-2">
-                        <FontAwesomeIcon  className='mt-1 mr-1 text-xl' icon="user" />
-                        <p className='text-xl'>{name}</p>
+                        {/* <FontAwesomeIcon  className='mt-1 mr-1 text-xl' icon="user" /> */}
+                        <img src="/images/UserLogo.jpg" alt="UserLogo" className='w-24 h-24'/>
+                        <p className='text-xl text-ttsPurple font-bold'
+                        onClick={handleLogout}>{name}</p>
                     </div>
                 ) : (
                     <div className="hidden lg:flex space-x-2">

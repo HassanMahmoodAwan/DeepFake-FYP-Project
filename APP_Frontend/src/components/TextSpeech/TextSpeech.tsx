@@ -38,7 +38,7 @@ function TextSpeech() {
 
   return (
     <>
-      <div className="w-full h-full box-border px-3 md:px-10 lg:px-28 flex justify-center items-center">
+      <div className="w-full h-full box-border px-3 md:px-10 lg:px-20 flex justify-center items-center">
         <div className="w-full my-8">
           <div className="w-full h-auto box-border space-y-1">
             <div className="mb-10">
@@ -66,12 +66,12 @@ function TextSpeech() {
                     countCharacters(e.target.value);
                   }}
                 />
-                <p className="font-bold text-base text-gray-900">
+                {/* <p className="font-bold text-base text-gray-900">
                   Character Count:{" "}
                   <span className="font-normal text-sm text-gray-800">{charCount}</span>
-                </p>
+                </p> */}
                 <div className="py-4 flex items-center">
-                  <h1 className=" text-lg">Output: </h1>
+                  <h1 className=" text-lg font-bold">Output: </h1>
                   <div className="px-5 text-gray-600 text-base">
                     {loading ? (
                       <div className="flex">
@@ -89,7 +89,7 @@ function TextSpeech() {
                   </div>
                 </div>
               </div>
-              <div className="w-full md:w-[50%] box-border px-5 md:py-10 flex md:flex-col items-end flex-wrap space-y-12">
+              <div className="w-full md:w-[50%] box-border px-5 md:py-8 flex md:flex-col items-end flex-wrap space-y-12">
                 <div className="w-72 lg:w-96 ">
                   <h1 className="mb-1 text-md font-bold">Select Voice Over</h1>
                   <Select
@@ -99,29 +99,16 @@ function TextSpeech() {
                     onChange={(val) => setOption(val)}
                     success
                   >
-                    {/* <Option value="daniel">Daniel</Option> */}
-                    {/* <Option value="emma">Emma</Option> */}
                     {/* <Option value="ImranKhan">Imran Khan</Option> */}
-                    <Option value="Wajahat">Wajahat</Option>
                     <Option value="Trump">Trump</Option>
+                    <Option value="Wajahat">Wajahat</Option>
+                    <Option value="daniel">Daniel</Option>
                     <Option value="Talha">Talha</Option>
+                    <Option value="emma">Emma</Option>
                   </Select>
                 </div>
-                {/* <div className="w-72 lg:w-96 ">
-                  <h1 className="mb-1 text-md font-bold">Preset</h1>
-                  <Select
-                    label="Select"
-                    placeholder=""
-                    value={preset}
-                    onChange={(val) => setPreset(val)}
-                  >
-                    <Option value="ultra_fast">Ultra_Fast</Option>
-                    <Option value="fast">Fast</Option>
-                    <Option value="high_quality">High Quality</Option>
-                    <Option value="standard">Standard</Option>
-                  </Select>
-                </div> */}
-                <div className="w-72 lg:w-96 ">
+                
+                <div className="w-72 lg:w-96 pt-5">
                   <Button
                     variant="filled"
                     placeholder=""

@@ -69,8 +69,12 @@ function ContactUs() {
     return formIsValid;
   };
   return (
-    <div className="w-full h-full my-20 box-border px-4 md:px-10 lg:px-28 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-8">Contact Us</h1>
+    <div className="w-full h-full my-8 box-border px-4 md:px-10 lg:px-28 flex flex-col items-center">
+      <div className='mb-10'>
+        <h1 className="text-3xl font-bold">Contact Us</h1>
+        <div className='py-[2.3px] bg-ttsPurple rounded'></div>
+      </div>
+
       <div className="w-full max-w-md space-y-8">
         <div className="">
           <Input id="name" name="name" label="QueryName" type="text" value={data.name}
@@ -82,7 +86,7 @@ function ContactUs() {
               label="Drop your message here, we will work on it.." />
         </div>
         <div className="w-full flex justify-center">
-          <Button onClick={handleSubmit} variant="filled" placeholder='placeholder' className="w-full md:w-80 bg-purple-700">Submit</Button>
+          <Button onClick={handleSubmit} variant="filled" placeholder='placeholder' className="w-full md:w-80 bg-ttsPurple">Submit</Button>
         </div>
       </div>
       <ToastContainer position="top-right" style={{ marginTop: "3rem" }} autoClose={3000} />
