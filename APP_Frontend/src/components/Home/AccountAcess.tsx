@@ -1,7 +1,9 @@
 // import React from 'react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import AccountAccessSideImg from "../../assets/AccountAccessSideImg.png"
 import { Button } from "@material-tailwind/react"
 import { NavLink } from "react-router-dom"
+import { faCheck } from "@fortawesome/free-solid-svg-icons"
 
 function AccountAcess() {
   return (
@@ -18,9 +20,15 @@ function AccountAcess() {
             <div className="h-[500px] w-[90%] bg-gray-50 rounded-lg shadow-deep-purple-200 shadow-md px-10 grid place-content-center hover:shadow-deep-purple-100 hover:relative hover:bottom-1  hover:shadow-lg">
                <h1 className="text-3xl font-bold text-center">Create a Account to Access</h1>
                <div className="mt-16 space-y-4 text-lg text-gray-800">
-                    <p>Generate Audio in Seconds.</p>
-                    <p>Use Editor for narrating any Script.</p>
-                    <p>Developed for Content Creator, Presentations. for Educational Purposes.</p>
+                    <p>
+                      <FontAwesomeIcon icon={faCheck} className="text-xl text-yellow-700 pr-3"/>
+                      Generate Audio in Minutes.</p>
+                    <p>
+                      <FontAwesomeIcon icon={faCheck} className="text-xl text-yellow-700 pr-3"/>
+                      Use Editor for narrating any Script.</p>
+                    <p className="flex">
+                      <FontAwesomeIcon icon={faCheck} className="text-xl text-yellow-700 pr-3"/>
+                      <p>Developed for Content Creator and Educational Purposes.</p></p>
                </div>
                <NavLink to={"/signup"} className={"w-full text-center"}>
                <Button variant="filled" className="bg-ttsPurple mt-10 w-full" placeholder ="" >

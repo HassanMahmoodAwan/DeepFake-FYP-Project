@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faGithub, faLinkedin, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
 function Admin() {
+    const [regUsers, setRegUsers] =  useState<number | string>("010")
+    const [no_voiceOvers, setNo_voiceOvers] =  useState<number | string>("005")
+
 
     const users = [{
         id:'001',
@@ -47,28 +50,35 @@ const targetVoices = [{
     firstName: "Wajahat",
     LastName: "Qazi",
     Profession:"Professor COMSATS", 
-    sampleVoice: "hassanmahmudawan@gmail.com", 
+    sampleVoice: "Link", 
 },
 {
     id:'002',
     firstName: "Donald",
     LastName: "Trump",
     Profession:"American Politician", 
-    sampleVoice: "hassanmahmudawan@gmail.com", 
+    sampleVoice: "link", 
 },
 {
     id:'003',
     firstName: "Danial",
     LastName: "Universal",
     Profession:"AI generated Voice", 
-    sampleVoice: "hassanmahmudawan@gmail.com", 
+    sampleVoice: "link", 
 },
 {
     id:'004',
     firstName: "Muhammad",
     LastName: "Talha",
     Profession:"Student COMSATS", 
-    sampleVoice: "ABC", 
+    sampleVoice: "link", 
+},
+{
+    id:'005',
+    firstName: "Emma",
+    LastName: "Universal",
+    Profession:"AI Generated Voice", 
+    sampleVoice: "link", 
 },
 
 
@@ -89,17 +99,17 @@ const targetVoices = [{
             {/* 0001 */}
             <div className='w-[12rem] h-[4.3rem] bg-white rounded-3xl shadow px-3 py-2 box-border space-y-[2px]'>
                 <h1 className='text-md font-bold'>Registered Users</h1>
-                <h3 className='text-base text-gray-500'>010+</h3>
+                <h3 className='text-base text-gray-500'>{regUsers}+</h3>
             </div>
             {/* 0002 */}
             <div className='w-[12rem] h-[4.3rem] bg-white rounded-3xl shadow px-3 py-2 box-border'>
                 <h1 className='text-md font-bold'>No of Voice-overs</h1>
-                <h3 className='text-base text-gray-500'>005+</h3>
+                <h3 className='text-base text-gray-500'>{no_voiceOvers}+</h3>
             </div>
             {/* 0003 */}
             <div className='w-[12rem] h-[4.3rem] bg-white rounded-3xl shadow px-3 py-2 box-border'>
                 <h1 className='text-md font-bold'>Avg. Gen-Time</h1>
-                <h3 className='text-base text-gray-500'>2.5 Minutes</h3>
+                <h3 className='text-base text-gray-500'>03 Minutes</h3>
             </div>
         </div>
 
@@ -167,99 +177,60 @@ const targetVoices = [{
 
             <h1 className='text-xl font-bold text-gray-950'>Targets Voice-Overs </h1>
 
+            
             {/* Table will come here */}
-            <div className="relative h-[260px] overflow-x-auto overflow-y-scroll shadow-md sm:rounded-lg">
+            <div className="relative h-[260px] overflow-y-scroll  shadow-md sm:rounded-lg bg-black ">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-md font-semibold text-black uppercase bg-gray-300">
                         <tr className=''>
                             <th scope="col" className="px-6 py-3">
-                                ID
+                                Id
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Color
+                                First Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Category
+                                Last Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Price
+                                Profession
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Action
+                                SampleVoice
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Actions
                             </th>
                         </tr>
                     </thead>
 
                     <tbody>
                         
-                        <tr className="odd:bg-gray-50  even:bg-gray-100 border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td className="px-6 py-4">
-                                White
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop PC
-                            </td>
-                            <td className="px-6 py-4">
-                                $1999
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-gray-50  even:bg-gray-100 border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td className="px-6 py-4">
-                                Black
-                            </td>
-                            <td className="px-6 py-4">
-                                Accessories
-                            </td>
-                            <td className="px-6 py-4">
-                                $99
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-gray-50  even:bg-gray-100 border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Google Pixel Phone
-                            </th>
-                            <td className="px-6 py-4">
-                                Gray
-                            </td>
-                            <td className="px-6 py-4">
-                                Phone
-                            </td>
-                            <td className="px-6 py-4">
-                                $799
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-gray-50  even:bg-gray-100 border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple Watch 5
-                            </th>
-                            <td className="px-6 py-4">
-                                Red
-                            </td>
-                            <td className="px-6 py-4">
-                                Wearables
-                            </td>
-                            <td className="px-6 py-4">
-                                $999
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
+
+                        {targetVoices.map( (each)=>(
+                            <tr key={each.id} className="odd:bg-gray-50  even:bg-gray-100 border-b border-gray-200">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {each.id}
+                                </th>
+                                <td className="px-6 py-4">
+                                    {each.firstName}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {each.LastName}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {each.Profession}
+                                </td>
+                                <td className="px-6 py-4">
+                                    
+                                    <a href={each.sampleVoice} className='text-blue-700 underline font-bold text-sm'>Link</a>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <a id={each.id} href={'https://linktr.ee/DeepClonning'}target="_blank"> <FontAwesomeIcon icon={faTrashCan} className="text-xl text-ttsPurple cursor-pointer" /> </a>
+                                </td>
+                            </tr>
+                        ) )}
+                        
                     </tbody>
                 </table>
 

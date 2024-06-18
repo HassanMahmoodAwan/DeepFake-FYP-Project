@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 function ContactUs() {
-  const[errors,setErrors] = useState({})
+  
   const [data,setData] = useState({
     name: "",
     query: "",
@@ -24,6 +24,10 @@ function ContactUs() {
     if (validateForm()) {
       try {
         const token:string = sessionStorage.getItem('token');
+        if (!token){
+          toast.error("You need to login First", {autoClose:2000})
+          return
+        }
         const recieved = (JSON.parse(token).token);
         const response = await axios.post("http://localhost:3333/query/send", data, {
           headers: {
@@ -42,32 +46,31 @@ function ContactUs() {
         toast.success("Your query has been successfully submitted", { autoClose: 2000 });
         console.log("Query:", response.data);
       } catch (error) {
-        // Show error message
         toast.error("Failed to submit query. Please try again later.", { autoClose: 2000 });
         console.error("Error:", error);
       }
     } else {
-      toast.error("All fields are required", { autoClose: 2000 });
       console.log("Form is invalid");
     }
   };
 
   const validateForm = () => {
-    let errors = {};
     let formIsValid = true;
 
     if (!data.name.trim()) {
       formIsValid = false;
-      errors["name"] = "name of query is required";
+      toast.error("Provide Query Title", {autoClose: 2000})
+      return
     }
 
     if (!data.query.trim()) {
       formIsValid = false;
-      errors["query"] = "query  is required";
+      toast.error("Provide your Message!", {autoClose:2000})
+      return
     }
-    setErrors(errors);
     return formIsValid;
   };
+
   return (
     <div className="w-full h-full my-8 box-border px-4 md:px-10 lg:px-28 flex flex-col items-center">
       <div className='mb-10'>
