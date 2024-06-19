@@ -4,6 +4,9 @@ import axios from "axios"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faFolderOpen, faMagicWandSparkles, faMicrophone } from '@fortawesome/free-solid-svg-icons'
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 
 
@@ -21,6 +24,7 @@ function VoiceCloning() {
   const [Output, setOutput] = useState<JSX.Element | string>("No Generated Ouptut!")
   const [showInput, setShowInput] = useState(false)
   const [showOutput, setShowOutput] = useState(false)
+  const [loading, setLoading] = useState(false)
 
 
   const [rec_blob, setBlob] = useState(null)
@@ -31,10 +35,16 @@ function VoiceCloning() {
   const chunksRef = useRef([])
   const timerRef = useRef(null)
 
+  const [isOutputGen, setIsOutputGen] = useState<boolean>(false)
+  const [genTime, setGenTime] = useState<null | number | string>(null)
+  let startTime:number;
+  let endTime:number;
+
 
 
   // ===== File Upload and Handling File
   async function useFileChange(e){
+    setIsOutputGen(false)
     const file = e.target.files[0]
     const url = URL.createObjectURL(file)
     console.log(url)
@@ -56,6 +66,7 @@ function VoiceCloning() {
 
   // ====== REcording Audio =========== 
    const startRecording = async () => {
+    setIsOutputGen(false)
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
@@ -93,6 +104,7 @@ function VoiceCloning() {
 
     } catch (error) {
       console.error('Error accessing the microphone:', error);
+      toast.error("Error Accessing MicroPhone", {autoClose:2000})
     }
   }
 
@@ -117,26 +129,43 @@ function VoiceCloning() {
         formData.append('file', rec_blob, `Voice_${rec_fileName}.mp3` );
         setIs_RecFile(false)
       }else {
-        formData.append('file', uploadFile);
+        if (uploadFile){
+          formData.append('file', uploadFile)
+        }else {
+          toast.error("No Input Provided")
+          return
+        }
       }
       formData.append('option', option)
+      startTime = Date.now()
+      setLoading(true)
 
-      setOutput(<div className='flex'>Loading<span><Spinner className='ml-4' color='blue'/></span></div>)
+      setOutput(<div >Loading...</div>)
 
       const response = await axios.post('http://localhost:3333/file/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-
+     
+      endTime = Date.now()
+      setIsOutputGen(true)
+      setGenTime(Math.round((endTime-startTime)/1000))
       setOutput(
         <audio controls>
             <source src={`${response.data.output}`} type="audio/mpeg" />
             Your browser does not support the audio element.
         </audio> )
 
+      toast.success("Sucessfully Generated Output!", {autoClose:1500})
+      
+      setLoading(false)
+
+
     } catch (error) {
-        alert("Server Error!")
+        toast.error("Server Error, Try Again!", {autoClose:1500})
+        setLoading(false)
+        setOutput("")
     } 
   }
 
@@ -144,7 +173,16 @@ function VoiceCloning() {
   
 
   return (
-    <>
+    <div className={loading?"pointer-events-none": ''}>
+
+    {loading?
+      <div className=" fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm  bg-gray-300 space-y-4">
+      <Spinner color="blue" className="h-20 w-20" />
+      <h4 className="text-gray-600 text-md">Loading ...</h4>
+      </div>
+      :
+      <div></div>}
+
     <div className="box-border my-10 px-28 space-y-10">
       
       {/* === HEADING & Highlight ===  */}
@@ -191,7 +229,7 @@ function VoiceCloning() {
             
             <div className='text-center flex flex-col items-center pt-6 pb-2'>
                 <div className='w-[50%] bg-gray-400 pt-[2px] rounded'></div>
-                <p className='w-16 relative bottom-3 bg-gray-50 px-1 rounded-fill text-gray-600'>OR</p>
+                <p className=' z-1 w-16 relative bottom-3 bg-gray-50 px-1 rounded-fill text-gray-600'>OR</p>
             </div>
 
 
@@ -277,15 +315,27 @@ function VoiceCloning() {
                   </div>
                 </div>
             {/* ====== END Output ======== */}
+            {isOutputGen?
+                <p className="font-bold text-sm text-green-500">
+                  Generation Time:{" "}
+                  <span className="font-normal text-sm ">{genTime} seconds</span>
+                </p>
+                : 
+                <p></p>}
 
 
 
 
           </div>
       </div>
-      
+
+      {/* ====================== */}
+      <ToastContainer
+        position="top-right"
+        style={{ marginTop: "4rem" }} 
+        />
     </div>
-    </>
+    </div>
   )
 }
 

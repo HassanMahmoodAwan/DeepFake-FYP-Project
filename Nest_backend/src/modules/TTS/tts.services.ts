@@ -15,7 +15,7 @@ export class TTSService {
     private readonly ttsModel: Model<TTS>,
   ) {
     this.replicate = new Replicate({
-      auth: 'r8_06l6hwas5tCLkIEaTteQsVhantyhuU90rYoZo',
+      auth: '',
     });
   }
 

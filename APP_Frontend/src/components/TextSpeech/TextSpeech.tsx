@@ -9,7 +9,7 @@ import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 function TextSpeech() {
   const [text, setText] = useState("");
   const [option, setOption] = useState("Wajahat");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isOutputGen, setIsOutputGen] = useState<boolean>(false)
   const [genTime, setGenTime] = useState<null | number | string>(null)
   const [audioSrc, setAudioSrc] = useState("");
@@ -51,9 +51,9 @@ function TextSpeech() {
     <div className={loading?"pointer-events-none": ''}>
 
     {loading?
-    <div className="fixed inset-0 bg-gray-950 z-100 opacity-70 grid place-content-center">
+    <div className=" fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm bg-gray-300 space-y-4">
     <Spinner color="blue" className="h-20 w-20" />
-    <h4 className="text-gray-100 text-md">Loading ...</h4>
+    <h4 className="text-gray-600 text-md">Loading ...</h4>
     </div>
     :
     <div></div>}
@@ -111,10 +111,8 @@ function TextSpeech() {
                   <div className="px-5 text-gray-600 text-base">
                     {loading ? (
                       <div className="flex">
-                        Loading
-                        <span>
-                          <Spinner className="ml-4" color="blue" />
-                        </span>
+                        Loading...
+                        
                       </div>
                     ) : (
                       <audio controls>
