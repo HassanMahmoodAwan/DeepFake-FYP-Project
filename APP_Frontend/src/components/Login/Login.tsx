@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Spinner} from "@material-tailwind/react"
 import axios from 'axios';
 import {
   Card,
@@ -14,6 +15,7 @@ function LoginPage() {
   const [errors, setErrors] = useState<string>("");
   const [emailError, setemailError] = useState<boolean>(false)
   const [passwordError, setPasswordError] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     email: "",
@@ -36,6 +38,7 @@ function LoginPage() {
     event.preventDefault();
   
     if (validateForm()) {
+      setLoading(true)
       try {
         const response:any = await axios.post("http://localhost:3333/auth/sign-in", formData);
         const data = response.data;
@@ -52,12 +55,17 @@ function LoginPage() {
           password: "",
         });
   
-        // toast.success("Please set a route for redirection", { autoClose: 2000 });
+        // toast.success("Login Successful !", { autoClose: 2000 });
         // console.log("Login successful:", data);
-        window.location.reload();
-        window.location.href = "/";
+        setTimeout(() => {
+          window.location.reload();
+          window.location.href = "/";
+          setLoading(false)
+        }, 2500);
+       
         
       } catch (error) {
+        setLoading(false)
         toast.error("Invalid email or password", { autoClose: 2000 });
         console.error("There was a problem with the login request:", error);
       }
@@ -103,7 +111,14 @@ function LoginPage() {
   return (
 
 
-    <>
+    <div className={loading?"pointer-events-none":""}>
+    {loading?
+      <div className="pointer-events-none cursor-none fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm  bg-gray-300 space-y-4">
+      <Spinner color="blue" className="h-20 w-20" />
+      <h4 className="text-gray-600 text-md">Loading ...</h4>
+      </div>
+      :
+      <div></div>}
 
 <section className="w-full h-full grid place-content-center">
       <div className="md:w-auto h-auto bg-white my-10 rounded-xl sm:p-6 px-2 py-6
@@ -197,7 +212,7 @@ function LoginPage() {
       </div>
     </section>
 
-    </>
+    </div>
   );
 }
 

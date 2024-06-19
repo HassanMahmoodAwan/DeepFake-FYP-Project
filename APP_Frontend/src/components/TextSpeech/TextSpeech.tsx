@@ -9,7 +9,7 @@ import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 function TextSpeech() {
   const [text, setText] = useState("");
   const [option, setOption] = useState("Wajahat");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isOutputGen, setIsOutputGen] = useState<boolean>(false)
   const [genTime, setGenTime] = useState<null | number | string>(null)
   const [audioSrc, setAudioSrc] = useState("");
@@ -88,6 +88,9 @@ function TextSpeech() {
                   className="rounded text-base text-gray-800 w-full placeholder:text-base p-3 shadow-md shadow-gray-400"
                   label=""
                   value={text}
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
                   onChange={(e) => {
                     setText(e.target.value);
                   }}

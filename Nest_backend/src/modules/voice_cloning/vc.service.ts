@@ -18,7 +18,7 @@ export class vcService {
     private readonly textModel: Model<Text>,
   ) {
     this.replicate = new Replicate({
-      auth: 'r8_06l6hwas5tCLkIEaTteQsVhantyhuU90rYoZo',
+      auth: '',
     });
   }
 

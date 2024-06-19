@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Spinner} from "@material-tailwind/react"
 // import { NavLink, useHistory } from 'react-router-dom';
 import {
   Card,
@@ -16,6 +17,8 @@ function SignUp() {
   const [nameError, setNameError] = useState(false)
   const [passwordError, setpasswordError] = useState(false)
   const [errors, setErrors] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+
 
   const [formData, setFormData] = useState({
     firstName:"",
@@ -81,6 +84,7 @@ function SignUp() {
     event.preventDefault();
 
     if (validateForm()) {
+      setLoading(true)
       const requestOptions = {
         method: "POST",
         headers: {
@@ -105,12 +109,15 @@ function SignUp() {
           });
           toast.success("User registered successfully!", { autoClose: 1000 });
 
+
           // console.log("POST request successful:", data);
           setTimeout(() => {
             window.location.href = '/';
-          }, 1500); 
+            setLoading(false)
+          }, 2500); 
         })
         .catch((error) => {
+          setLoading(false)
           toast.error("Email already exists", { autoClose: 2000 });
           console.error("There was a problem with the POST request:", error);
         });
@@ -126,7 +133,14 @@ function SignUp() {
 
   return (
 
-    <>
+    <div className={loading?"pointer-events-none":""}>
+    {loading?
+      <div className="pointer-events-none cursor-none fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm  bg-gray-300 space-y-4">
+      <Spinner color="blue" className="h-20 w-20" />
+      <h4 className="text-gray-600 text-md">Loading ...</h4>
+      </div>
+      :
+      <div></div>}
 
     <section className="w-full h-full grid place-content-center">
       <div className="md:w-auto h-auto bg-white my-10 rounded-xl sm:p-6 px-2 py-6
@@ -155,7 +169,7 @@ function SignUp() {
                   id="firstName"
                   size="md"
                   placeholder="Enter First Name"
-                  className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                  className={` focus:!border-t-gray-900 shadow-md shadow-gray-300 
                     ${nameError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
                   labelProps={{
                     className: "before:content-none after:content-none",
@@ -178,7 +192,7 @@ function SignUp() {
                   id="lastName"
                   size="md"
                   placeholder="Enter Last Name"
-                  className="  shadow-md shadow-gray-200 focus:!border-gray-900 "
+                  className="  shadow-md shadow-gray-300 focus:!border-gray-900 "
                   labelProps={{
                     className: "before:content-none after:content-none",
                   }}
@@ -200,7 +214,7 @@ function SignUp() {
                 id="email"
                 size="md"
                 placeholder="name@mail.com"
-                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-300 
                   ${emailError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
                 labelProps={{
                   className: "before:content-none after:content-none",
@@ -225,7 +239,7 @@ function SignUp() {
                 id="password"
                 size="md"
                 placeholder="********"
-                className={` focus:!border-t-gray-900 shadow-md shadow-gray-200 
+                className={` focus:!border-t-gray-900 shadow-md shadow-gray-300 
                   ${passwordError? "!border-t-red-400 focus:!border-t-red-500":"!border-t-gray-400"}`}
                 labelProps={{
                   className: "before:content-none after:content-none",
@@ -264,7 +278,7 @@ function SignUp() {
       </div>
     </section>
 
-    </>
+    </div>
   );
 }
 

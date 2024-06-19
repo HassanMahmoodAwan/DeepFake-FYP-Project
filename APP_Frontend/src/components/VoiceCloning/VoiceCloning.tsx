@@ -31,7 +31,7 @@ function VoiceCloning() {
   const [rec_fileName, setRecFileName] = useState<any>('')
   const [is_recFile, setIs_RecFile] = useState(false)
 
-  
+
   const chunksRef = useRef([])
   const timerRef = useRef(null)
 
@@ -44,20 +44,27 @@ function VoiceCloning() {
 
   // ===== File Upload and Handling File
   async function useFileChange(e){
-    setIsOutputGen(false)
+    setInputFile(null);
+    setIsOutputGen(false);
+    setIs_RecFile(false);
+
+
     const file = e.target.files[0]
-    const url = URL.createObjectURL(file)
-    console.log(url)
+    // const url = URL.createObjectURL(file);
+    // setUrl(URL.createObjectURL(file))
 
     if (file){
-      setUploadFile(file)
-      setFilename(file.name)
+      const url = URL.createObjectURL(file);
+      setUploadFile(file);
+      setFilename(file.name);
       
-      setInputFile(
-        <audio controls>
+      setInputFile( <audio controls>
           <source src={url} type="audio/mpeg" />
           Your browser does not support the audio element.
-        </audio> )
+        </audio> );
+
+      console.log(inputFile)
+
 
     }else{
       setFilename("No file Chooses")
@@ -122,12 +129,13 @@ function VoiceCloning() {
 
   // ============ OUTPUT ===========
   async function generateOutput(){
+    setIsOutputGen(false)
     try {
       const formData = new FormData();
 
       if (is_recFile){
         formData.append('file', rec_blob, `Voice_${rec_fileName}.mp3` );
-        setIs_RecFile(false)
+        // setIs_RecFile(false)
       }else {
         if (uploadFile){
           formData.append('file', uploadFile)
@@ -173,10 +181,10 @@ function VoiceCloning() {
   
 
   return (
-    <div className={loading?"pointer-events-none": ''}>
+    <div className={loading?"pointer-events-none cursor-none": ''}>
 
     {loading?
-      <div className=" fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm  bg-gray-300 space-y-4">
+      <div className="pointer-events-none cursor-none fixed inset-0 z-50 opacity-70 grid place-content-center backdrop-blur-sm  bg-gray-300 space-y-4">
       <Spinner color="blue" className="h-20 w-20" />
       <h4 className="text-gray-600 text-md">Loading ...</h4>
       </div>
